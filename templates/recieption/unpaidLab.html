@@ -1,0 +1,360 @@
+
+{% extends "recieption/master.html" %}
+
+
+
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static',filename='vendor/datatables-plugins/dataTables.bootstrap.css') }}">
+
+  <!-- DataTables Responsive CSS -->
+  <!-- <link href="static/vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet"> -->
+<link rel="stylesheet" href="{{ url_for('static' ,filename='vendor/datatables-responsive/dataTables.responsive.css') }}">
+<link rel="stylesheet" href="{{ url_for('static',    filename='vendor/bootstrap/css/bill.css') }}">
+<style>
+
+
+</style>
+
+{% endblock %}
+
+{% block body %}
+
+<div class="row" style="margin-top:20px">
+  
+    <div class="col-sm-9 pull-right">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                  <form action="{{url_for('showunpaidLab', filter = 'y')}}">
+                  <div class="input-group ">
+                      <input type="text" class="form-control" name = 'visitId' placeholder=" د لیدنی ای ډی ولیکی... ">
+                      <span class="input-group-btn">
+                      <button class="btn btn-default" type="submit">
+                          <i class="fa fa-search"></i>
+                      </button>
+                  </span>
+                 
+              </div>
+            </form>
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
+                        <thead>
+                            <tr>
+                                <th hidden = true >Visit ID</th>
+                                <th> د مریض نوم </th>
+                                <th> د ډاکټر نوم </th>
+                                <th> د معایناتو شمیر </th>
+                                <th>ټوټل</th>
+                                <th>تاریخ</th>
+                                <th>اداینه</th>
+                                <th>بیل</th>
+                               
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for payment in dataList %}
+                          <tr>
+                              <td hidden = true >{{payment.visitId}}</td>
+                              <td>{{payment.patientName.decode('utf-8')}}</td>
+                              <td>{{payment.employeeName.decode('utf-8')}}</td>
+
+                            <td class ="bill" > <a >{{payment.count}}</a> </td>
+                              <td>{{payment.Total}}</td>
+                              <td>{{payment.date}}</td>
+                              <td>{{'نا تصفیه'}}</td>
+
+
+
+                             
+                            
+                              <td>
+                                  
+                                  <button id = "printButton" class="btn btn-primart btn-sm print hidden" > چاپ </button>
+                       
+
+                               
+                            
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                    </table>
+                    <!-- /.table-responsive -->
+                    
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
+
+        <div class="col-sm-2">
+                <div class="row">
+                    
+                    <div id="invoice-POS" style="direction:rtl">
+  
+                        <center id="top">
+                          <div class="info">
+                            <h2>افغان روغتون</h2>
+                          </div>
+                          <!--End Info-->
+                        </center>
+                        <!--End InvoiceTop-->
+                    
+                        <div id="m">
+                          <div class="info">
+                            <h2 id=result>  </h2>
+                            <div>
+                                   
+                                <p> د لیدنی ای ډی: <span id="visiId" class="pull-left" ></span> </p>
+                                <p> د مریض نوم: <span id = "patientName" class="pull-left"   ></span> </p>
+                                <p> تاریخ: <span id = "date" class="pull-left"  ></span> </p>
+                                <p> د ډاکټر نوم: <span id = "docterName" class="pull-left"  ></span> </p>
+                              
+
+                            </div>
+                          </div>
+                        </div>
+                        <!--End Invoice Mid-->
+                    
+                        <div id="b">
+                          
+                          <div id="table">
+                            <table name=sellData class="ohh">
+                              <tr class="tabletitle">
+                                <td class="item">
+                                  <h2>شمیره</h2>
+                                </td>
+                                <td class="Hours">
+                                  <h2>معاینات</h2>
+                                </td>
+                                <td></td>
+                                <td class="Hours">
+                                  <h2>قیمت</h2>
+                                </td>
+                              
+                              </tr>
+                              <tbody id = "tests">
+
+                              </tbody>
+                            
+                              <tr class="tabletitle" name='total'>
+                                
+                                <td class="Rate">
+                                  <h2>ټوټل</h2>
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td class="payment">
+                                  <h2 name="fullTotal" id = "total"></h2>
+                                </td>
+                              </tr>
+                    
+                            </table>
+                          </div>
+                          <!--End Table-->
+                    
+                          <div id="legalcopy" class="text-center">
+                            <p class="legal"><strong> د شکایاتو لپاره له لاندی شمیری سره تماس ونیسی </strong> <br> ۰۷۰۰۴۴۵۵۳۳
+                            </p>
+                          </div>
+                    
+                        </div>
+                        <!--End InvoiceBot-->
+                      </div>
+              
+                </div>
+            </div>
+    
+</div>
+
+{% endblock %}
+
+{% block head_js %}
+<!-- <script src="../vendor/datatables/js/jquery.dataTables.min.js"></script> -->
+<script src="{{ url_for('static',filename='vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
+
+<!-- <script src="../vendor/datatables-plugins/dataTables.bootstrap.min.js"></script> -->
+<script src="{{ url_for('static',filename='vendor/datatables-plugins/dataTables.bootstrap.min.js') }}"></script>
+
+<!-- <script src="../vendor/datatables-responsive/dataTables.responsive.js"></script> -->
+<script src="{{ url_for('static',filename='vendor/datatables-responsive/dataTables.responsive.js') }}"></script>
+
+<script>
+
+
+
+  $('.print').click(function(){
+
+    var visitId = $(this).closest("tr").find("td:first-child").text();
+    var payment = $(this).closest("tr").find("td:nth-child(6)").text();
+
+    var data = {
+      visitId : visitId,
+      payment: payment
+    };
+
+    data = JSON.stringify(data);
+
+
+
+  
+$.ajax({
+    url:'/payLab',
+    type: 'POST',
+    data: data,
+    contentType: 'application/json; charset = UTF-8',
+    cache:false,
+    success: function(response){
+
+      if(response == 'paid'){ 
+
+      $('#invoice-POS').printThis({
+
+        debug: false, // show the iframe for debugging
+        importCSS: true, // import parent page css
+        importStyle: false, // import style tags
+        printContainer: true, // print outer container/$.selector
+        loadCSS: "", // path to additional css file - use an array [] for multiple
+        pageTitle: "", // add title to print page
+        removeInline: false, // remove inline styles from print elements
+        removeInlineSelector: "*", // custom selectors to filter inline styles. removeInline must be true
+        printDelay: 333, // variable print delay
+        header: null, // prefix to html
+        footer: null, // postfix to html
+        base: false, // preserve the BASE tag or accept a string for the URL
+        formValues: true, // preserve input/form values
+        canvas: false, // copy canvas content
+        doctypeString: '...', // enter a different doctype for older markup
+        removeScripts: false, // remove script tags from print content
+        copyTagClasses: false, // copy classes from the html & body tag
+        beforePrintEvent: null, // function for printEvent in iframe
+        beforePrint: null, // function called before iframe is filled
+        afterPrint: null     // function called before iframe is removed
+
+
+      });
+      
+      }
+       
+
+    },
+    error:function(response){
+        console.log("Error")
+    }
+
+});
+
+
+
+
+
+  });
+
+
+$(".bill").click(function(){
+
+
+  $(this).closest("tr").find("td:nth-child(8) > Button").removeClass('hidden');
+
+
+
+var visitId = $(this).closest("tr").find("td:first-child").text();
+var docterName = $(this).closest("tr").find("td:nth-child(3)").text();
+var patientName = $(this).closest("tr").find("td:nth-child(2)").text();
+var payment = $(this).closest("tr").find("td:nth-child(7)").text();
+var date = $(this).closest("tr").find("td:nth-child(6)").text();
+
+var total = $(this).closest("tr").find("td:nth-child(5)").text();
+
+
+
+// console.log(data);
+data = JSON.stringify(visitId);
+
+$.ajax({
+    url:'/getTestPayment',
+    type: 'POST',
+    data: data,
+    contentType: 'application/json; charset = UTF-8',
+    cache:false,
+    success: function(response){
+
+      $('#tests').empty();
+
+            for(var i =0; i<response.length; i++){
+       
+
+var No= i+1
+
+
+         
+      $('#tests').append(
+
+            `
+            <tr class=service >
+            <td class=tableitem style='cursor: pointer' > <p class=itemtext >${No}</p></td>
+          
+            <td class=tableitem style='cursor: pointer' > <p class=itemtext >${response[i]['Name']} </p></td>
+            <td></td>
+            <td class=tableitem style='cursor: pointer' > <p class=itemtext >${response[i]['Amount']}</p></td>
+        
+          
+            </tr>
+
+            `
+
+      );
+
+        }
+
+        $('#docterName').text(docterName);
+        $('#patientName').text(patientName);
+        $('#visiId').text(visitId);
+        $('#total').text(total);
+        $('#date').text(date);
+
+
+
+    },
+    error:function(response){
+        console.log("Error")
+    }
+
+});
+
+
+
+
+    $('.discount').on("change keyup blur",function(){
+
+            // console.log($('.discount').text());
+            var main = $('.fee').text();
+            var disc = $('.discount').text();
+            var dec = (disc/100).toFixed(2);
+            var mult = main*dec;
+            var discount = main-mult;
+            $('.netAmount').text(discount);
+
+    });
+
+
+
+
+
+});
+
+
+
+
+    $(document).ready(function() {
+
+            $('#dataTables-example').DataTable({
+                responsive: true
+             
+            });
+        
+        });
+    
+    </script>
+{% endblock %}

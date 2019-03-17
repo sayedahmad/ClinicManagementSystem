@@ -1,0 +1,319 @@
+
+  {% extends "admin/master.html" %}
+
+  {% block head %}
+  <link rel="stylesheet" href="{{ url_for('static',    filename='vendor/bootstrap/css/bill.css') }}">
+
+    <!-- DataTables Responsive CSS -->
+    <!-- <link href="static/vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet"> -->
+<style type='text/css'>
+#invoice-POS{
+  direction:rtl;
+}
+</style>
+
+{% endblock %}
+
+  {% block content %}
+
+  <div class="row">
+    <div class="page-header"></div>
+  </div>
+
+<div class = "container-fluid">
+    <div class="row">
+      <div class="col-md-8" >
+
+        <table class="table table-bordered table-hover ohh" class="b" id="tab_logic" name=sellData>
+          <thead>
+            <tr>
+
+              <th class="text-center"> تولید </th>
+              <th class="text-center"> تعداد </th>
+              <th class="text-center"> قیمت </th>
+              <th class="text-center"> ټوټل </th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <tr class="tabletitle" name='total'>
+            <td></td>
+            <td></td>
+            <td class="Rate">
+              <h2> ټوټل </h2>
+            </td>
+            <td class="payment">
+              <h2 name="fullTotal">$3,644.25</h2>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+
+          <div class="row">
+          <div class = "col-md-12" >
+            <input type="submit" name="send" class="form-control" id = "t" value="ثبت کړی">
+
+          </div>
+          </div>
+      </div>
+
+      <div class=" col-sm-2">
+        <div id="invoice-POS">
+            <center id="top">
+                <div class="info">
+                  <h2> افغان اعظمی کلينیک </h2>
+                </div>
+                <!--End Info-->
+              </center>
+
+          <div id="m">
+            <div class="info">
+              <h2 id=result class="text-center" > د درملتون بیل </h2>
+
+              </div>
+            </div>
+            <!--End Invoice Mid-->
+            <div id="b">
+                <p>د بیل شمیره: <span  class=" billNo pull-left" ></span> </p>
+
+                <div id="table">
+                  <table name='sellData1' class="ohh1">
+                    <tr class="tabletitle">
+                      <td class="item">
+                        <h2>جنس</h2>
+                      </td>
+                      <td class="Hours">
+                        <h2>تعداد</h2>
+                      </td>
+                      <td class="Hours">
+                        <h2>قیمت</h2>
+                      </td>
+                      <td class="Rate">
+                        <h2>ټوټل</h2>
+                      </td>
+                    </tr>
+
+                    <tr class="tabletitle" name='total1'>
+
+                      <td class="Rate">
+                        <h2>مجموعه</h2>
+                      </td>
+                      <td></td>
+                      <td></td>
+                      <td class="payment1">
+                        <h2 name="fullTotal">$3,644.25</h2>
+                      </td>
+                    </tr>
+                  </table>
+                </div><!--End Table-->
+                <div id="legalcopy" class="text-center">
+                    <p class="legal"><strong> د شکایاتو لپاره له لاندی شمیری سره تماس ونیسی </strong> <br> ۰۷۰۰۴۴۵۵۳۳
+                    </p>
+                  </div>
+            </div>
+
+    </div>
+
+    <!--End Invoice-->
+  <br>
+
+</div>
+</div>
+
+
+{% endblock %}
+
+{% block head_js %}
+<!-- <script src="../vendor/datatables/js/jquery.dataTables.min.js"></script> -->
+
+<!-- <script src="../vendor/datatables-plugins/dataTables.bootstrap.min.js"></script> -->
+
+<!-- <script src="../vendor/datatables-responsive/dataTables.responsive.js"></script> -->
+    {% block print %}
+    <script src="{{ url_for('static',    filename='vendor/jquery/printThis.js') }}"></script>
+
+    {% endblock %}
+
+<script>
+
+  function printBill(){
+    $("#invoice-POS").printThis({
+        debug: false, // show the iframe for debugging
+        importCSS: true, // import parent page css
+        importStyle: false, // import style tags
+        printContainer: true, // print outer container/$.selector
+        loadCSS: "", // path to additional css file - use an array [] for multiple
+        pageTitle: "", // add title to print page
+        removeInline: false, // remove inline styles from print elements
+        removeInlineSelector: "*", // custom selectors to filter inline styles. removeInline must be true
+        printDelay: 333, // variable print delay
+        header: null, // prefix to html
+        footer: null, // postfix to html
+        base: false, // preserve the BASE tag or accept a string for the URL
+        formValues: true, // preserve input/form values
+        canvas: false, // copy canvas content
+        doctypeString: '...', // enter a different doctype for older markup
+        removeScripts: false, // remove script tags from print content
+        copyTagClasses: false, // copy classes from the html & body tag
+        beforePrintEvent: null, // function for printEvent in iframe
+        beforePrint: null, // function called before iframe is filled
+        afterPrint: null     // function called before iframe is removed
+    });
+  }
+    function tackbcr(active){
+      $(function(){
+  			$.getJSON('/tackBCR', {
+  				 brcode: active,
+  			}, function(data) {
+          if(data.result.length){
+
+            $('p.billNo').text(data.result[3]);
+            var rs=true;
+
+            $(".ohh tr.service").each(function() {
+              var cells = $('td>p', this);
+
+              if(cells.eq(1).text()==data.result[1]){
+                cells.eq(2).text(parseFloat(cells.eq(2).text())+1);
+                rs=false;
+              }
+            });
+            if(rs==true){
+              var totalrow=$('tr[name="total"]');
+              totalrow.detach();
+              $('table[name="sellData"]').append("<tr class=service><td class=tableitem style='cursor: pointer'><p class=itemtext>"+data.result[0]+"</p></td><td class=tableitem hidden=True><p class=itemtext>"+data.result[1]+"</p></td><td class='tableitem active' contenteditable='true'><p class=itemtext>1</p></td><td class='tableitem active' contenteditable='true'><p class=itemtext>"+data.result[2]+"</p></td><td class='active'><p class=subtotal>345</p></td></tr>");
+              $('table[name="sellData"]').append(totalrow);
+              //$('.ohh td').focus();
+            }
+            collect();
+          }
+  			});
+      });
+    }
+
+    var arr=[];
+
+    function collect(){
+      arr=[];
+      $('.ohh tr.service').each(function() {
+        var cells = $('td>p', this);
+        cells.last().text(parseFloat(cells.eq(2).text()) * parseFloat(cells.eq(3).text()));
+        arr.push ({
+          "product": cells.eq(0).text(),
+          "productId": cells.eq(1).text(),
+          "qty": cells.eq(2).text(),
+          "price": cells.eq(3).text(),
+          "billNo": $('p.billNo').text(),
+          "sellerId": "{{ current_user.id }}"
+        });
+      });
+      var head=$('.ohh1 tr').first();
+
+      var foot=$('.ohh1 tr').last();
+      foot.children().children('.payment1>h2').text('0');
+      $('.ohh1').empty();
+      $('.ohh1').append(head);
+      for (i=0; i<arr.length; i++){
+        var body="<tr class=service><td class=tableitem style='cursor: pointer'><p class=itemtext>"+arr[i].product+"</p></td><td class=tableitem hidden=True><p class=itemtext>"+arr[i].productId+"</p></td><td class='tableitem active' contenteditable='true'><p class=itemtext>"+arr[i].qty+"</p></td><td class='tableitem active' contenteditable='true'><p class=itemtext>"+arr[i].price+"</p></td><td class='active'><p class=subtotal>"+arr[i].qty*arr[i].price+"</p></td></tr>"
+        //alert(arr[i].product);
+        $('.ohh1').append(body);
+      }
+      $('.ohh1').append(foot);
+      var sum = 0;
+      $(".ohh tr.service").each(function() {
+
+        var cells = $('td>p', this);
+        sum+=parseFloat(cells.last().text());
+      });
+      $('h2[name="fullTotal"]').text(sum);
+    }
+
+$('documnet').ready(function(){
+  collect();
+    $('input[name="send"]').click(function(){
+      collect();
+      $.ajax({
+        url: "/store",
+        type: "POST",
+        data: JSON.stringify(arr),
+        contentType: "application/json; charset=utf-8",
+        success: function(dat) {
+
+          var head=$('.ohh tr').first();
+          var foot=$('.ohh tr').last();
+          foot.children().children('.payment>h2').text('0');
+          $('.ohh').empty();
+          $('.ohh').append(head);
+          $('.ohh').append(foot);
+
+        }
+      });
+    });
+
+    $('.ohh').on('click', 'tr.service>td:first-child', function(){
+      var val=parseFloat($(this).closest('tr').find('td:nth-child(3)').text());
+
+      if(val>=2){
+        $(this).closest('tr').find('td:nth-child(3)').text('');
+        val-=1;
+        $(this).closest('tr').find('td:nth-child(3)').append('<p class=itemtext>'+val+'</p>');
+
+      }else{
+          $(this).closest('tr').remove();
+      }
+      collect();
+    });
+
+    $('.ohh').on('keyup', 'tr.service>td:nth-child[2]', function(){
+      collect();
+    });
+});
+
+  var active='';
+
+  $('body').keydown(function(e){
+      //alert(e.key);
+    if(e.keyCode == '13'){
+
+      if ($('.ohh td').focusin()){
+        $('#fu').focus();
+      }else{
+        $('.ohh td').focus();
+      }
+      collect();
+    }
+
+    if (e.keyCode>='47' && e.keyCode<='58'){
+      active+=e.key
+
+    if (active.length==13){
+      tackbcr(active);
+    }
+
+    setTimeout(function(){
+      active='';
+      }, 300);
+    }
+
+  });
+Mousetrap.bind(['alt+s'], function(){
+  $('#t').focus();
+  $('#t').click();
+
+});
+
+Mousetrap.bind(['alt+p'], function(){
+  printBill();
+});
+
+
+function request() {
+  setTimeout(request, 3000);
+  alert('wow');
+}
+
+//request();
+
+  </script>
+
+{% endblock %}

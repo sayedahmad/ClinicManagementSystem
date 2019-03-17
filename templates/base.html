@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>کلینیک</title>
+
+ 
+
+    <!-- In-lining styles to avoid needing a separate .css file -->
+    <style>
+
+        hr { border-color: #cccccc; margin: 0; }
+        .no-margins { margin: 0px; }
+        .with-margins { margin: 10px; }
+        .col-centered { float: none; margin: 0 auto; }
+
+    </style>
+
+ 
+
+    {# *** Allow sub-templates to insert extra html to the head section *** #}
+    {% block extra_css %}{% endblock %}
+  </head>
+
+
+<body  >
+    {% block body %}
+
+   
+    <hr class="no-margins"/>
+
+    <div id="main-div" class="with-margins">
+        <div class="panel panel-primary">
+    {# One-time system messages called Flash messages #}
+    {% block flash_messages %}
+        {%- with messages = get_flashed_messages(with_categories=true) -%}
+            {% if messages %}
+            
+                {% for category, message in messages %}
+
+                    {% if category=='error' %}
+
+                        {% set category='danger' %}
+
+                    {% endif %}
+
+                    <div class="alert alert-{{category}}">{{ message|safe }}</div>
+
+                {% endfor %}
+
+            {% endif %}
+
+        {%- endwith %}
+
+    {% endblock %}
+
+    {% block main %}
+        {% block content %}
+
+        {% endblock %}
+    {% endblock %}
+    </div>
+</div>
+   
+    {% endblock %}
+
+
+  
+    {# *** Allow sub-templates to insert extra html to the bottom of the body *** #}
+    {% block extra_js %}{% endblock %}
+
+  </body>
+</html>

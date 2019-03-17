@@ -1,0 +1,178 @@
+
+  {% extends "admin/master.html" %}
+
+  <!-- {% block head %} -->
+  <!-- <link rel="stylesheet" href="{{ url_for('static',filename='vendor/datatables-plugins/dataTables.bootstrap.css') }}"> -->
+
+    <!-- DataTables Responsive CSS -->
+    <!-- <link href="static/vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet"> -->
+  <!-- <link rel="stylesheet" href="{{ url_for('static' ,filename='vendor/datatables-responsive/dataTables.responsive.css') }}">
+
+{% endblock %} -->
+
+  {% block content %}
+<div class="row">
+  <div class="col-lg-12">
+      <h1 class="page-header"></h1>
+  </div>
+
+  <!-- /.col-lg-12 -->
+</div>
+
+<div class = "container-fluid">
+  <div class="row">
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-comments fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge">26</div>
+                        <div>Total Sales</div>
+                    </div>
+                </div>
+            </div>
+            <a href="#">
+                <div class="panel-footer">
+                    <span class="pull-left">View Details</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-green">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-tasks fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge">12</div>
+                        <div>Total Purchase</div>
+                    </div>
+                </div>
+            </div>
+            <a href="#">
+                <div class="panel-footer">
+                    <span class="pull-left">View Details</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circ>12</div>
+                      <div>Tle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-yellow">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-shopping-cart fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge">124</div>
+                        <div>Expenses</div>
+                    </div>
+                </div>
+            </div>
+            <a href="#">
+                <div class="panel-footer">
+                    <span class="pull-left">View Details</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-red">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-support fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge">13</div>
+                        <div>Total Profit</div>
+                    </div>
+                </div>
+            </div>
+            <a href="#">
+                <div class="panel-footer">
+                    <span class="pull-left">View Details</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+</div>
+
+<div class="row">
+                
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+            <div class="row">
+              
+                <div class="col-lg-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Sales Report
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div id="morris-bar-chart1"></div>
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-6 -->
+                <div class="col-lg-6">
+                  <div class="panel panel-default">
+                      <div class="panel-heading">
+                          Purchase Report
+                      </div>
+                      <!-- /.panel-heading -->
+                      <div class="panel-body">
+                          <div id="morris-bar-chart2"></div>
+                      </div>
+                      <!-- /.panel-body -->
+                  </div>
+                  <!-- /.panel -->
+              </div>
+            </div>
+
+
+<!-- {% endblock %}
+
+{% block head_js %} -->
+<!-- <script src="../vendor/datatables/js/jquery.dataTables.min.js"></script> -->
+<script src="{{ url_for('static',filename='vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
+
+<!-- <script src="../vendor/datatables-plugins/dataTables.bootstrap.min.js"></script> -->
+<script src="{{ url_for('static',filename='vendor/datatables-plugins/dataTables.bootstrap.min.js') }}"></script>
+
+<!-- <script src="../vendor/datatables-responsive/dataTables.responsive.js"></script> -->
+<script src="{{ url_for('static',filename='vendor/datatables-responsive/dataTables.responsive.js') }}"></script>
+<!-- <script src="{{ url_for('static',filename='data/morris-data.js') }}"></script> -->
+
+<!-- <script src="../data/morris-data.js"></script> -->
+<!-- <script>
+
+    $(document).ready(function() {
+
+            $('#dataTables-example').DataTable({
+                responsive: true
+            });
+        
+        });
+    
+    </script> -->
+<!-- {% endblock %} -->

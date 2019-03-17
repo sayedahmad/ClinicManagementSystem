@@ -1,0 +1,126 @@
+
+  {% extends "Lab/master.html" %}
+
+  {% block head %}
+  <link rel="stylesheet" href="{{ url_for('static',filename='vendor/datatables-plugins/dataTables.bootstrap.css') }}">
+
+    <!-- DataTables Responsive CSS -->
+    <!-- <link href="static/vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet"> -->
+  <link rel="stylesheet" href="{{ url_for('static' ,filename='vendor/datatables-responsive/dataTables.responsive.css') }}">
+
+{% endblock %}
+
+  {% block body %}
+     
+       
+
+  <div class = "container">
+        
+                
+                 
+    <div class="panel panel-default">
+        <div class="panel-heading">
+                <form action="{{url_for('LabView' , filter = 'y')}}">
+                        <div class="input-group ">
+                            <input type="text" class="form-control" name = 'visitId' placeholder=" د لیدنی ای ډی ولیکی... ">
+                            <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </span>
+                       
+                    </div>
+                  </form>
+        </div>
+        <!-- /.panel-heading -->
+        <div class="panel-body">
+            <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
+              <thead>
+                
+                  <tr>
+                      <th> د مریض نوم </th>
+                      <th> د ډاکټر نوم </th>
+                      <th> د معایناتو شمیر </th>
+                      <th hidden = true >VisitId</th>
+                      <th>د معایناتو حالت</th>
+                      <th>تشریحات</th>
+                      <th>کتنه</th>
+                   
+                  </tr>
+              </thead>
+              <tbody>
+                  {% for patient in datalist %}
+                  <tr>
+                      <td>{{ patient.patientName.decode('utf-8') }}</td>
+                      <td>{{ patient.employeeName.decode('utf-8') }}</td>
+                      <td>{{ patient.count }}</td>
+                      <td hidden = true >{{ patient.visitId }}</td>
+                      
+                      <td>
+                          {%  if patient.action == 'tested' %}
+                          {{'معاینه شوی'}}
+                          {% else %}
+                          {{'نامعاینه شوی'}}
+                          {% endif %}
+
+                      </td>
+
+                      
+                    
+                  
+                      <td>
+                          <a href="{{ url_for('testDetialForLab', visitId=patient.visitId ) }}">معاینات کتل</a>
+                      </td>
+                      <td>
+                          {% if patient.action == "untested"  %}
+                          <a onclick="return confirm('ar you sure')" href="{{ url_for('testAction', visitId=patient.visitId, action = 'y' ) }}"> وکتل شو </a>
+                          {% else %}
+                          <a onclick="return confirm('ar you sure')" href="{{ url_for('testAction', visitId=patient.visitId, action = 'n' ) }}">ردول</a>
+                          {% endif %}
+
+
+                      </td>
+
+                  
+                  </tr>
+                  {% endfor %}
+              </tbody>
+            </table>
+            <!-- /.table-responsive -->
+            
+        </div>
+        <!-- /.panel-body -->
+    </div>
+    <!-- /.panel -->
+</div>
+          
+
+{% endblock %}
+
+{% block head_js %}
+<!-- <script src="../vendor/datatables/js/jquery.dataTables.min.js"></script> -->
+<script src="{{ url_for('static',filename='vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
+
+<!-- <script src="../vendor/datatables-plugins/dataTables.bootstrap.min.js"></script> -->
+<script src="{{ url_for('static',filename='vendor/datatables-plugins/dataTables.bootstrap.min.js') }}"></script>
+
+<!-- <script src="../vendor/datatables-responsive/dataTables.responsive.js"></script> -->
+<script src="{{ url_for('static',filename='vendor/datatables-responsive/dataTables.responsive.js') }}"></script>
+
+<script>
+
+    $(document).ready(function() {
+
+            $('#dataTables-example').DataTable({
+                responsive: true
+            });
+        
+        });
+    
+    </script>
+     <script>
+        $(function () {
+            $('#datetimepicker1').datetimepicker();
+        });
+    </script>
+{% endblock %}

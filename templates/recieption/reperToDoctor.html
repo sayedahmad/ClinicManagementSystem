@@ -1,0 +1,281 @@
+
+{% extends "recieption/master.html" %}
+
+
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block head %}
+<link rel="stylesheet" href="{{
+    url_for('static',filename='vendor/datatables-plugins/dataTables.bootstrap.css')
+    }}">
+    <link rel="stylesheet" href="{{ url_for('static',    filename='vendor/bootstrap/css/bill.css') }}">
+
+<!-- DataTables Responsive CSS -->
+<!-- <link href="static/vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet"> -->
+<link rel="stylesheet" href="{{ url_for('static' ,filename='css/select2.min.css') }}">
+
+
+<style>
+
+
+input{
+    width: 40px;
+    border: none;
+}
+
+p{
+    margin-bottom: 3px;
+}
+
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-sm-4 pull-right">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4> د ډاکټر فیس ثبتول </h4>
+
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <form action="{{url_for('adddoctorPayment')}}">
+                        
+                    {{wtf.form_field(form.patientID)}}
+
+                    {{wtf.form_field(form.doctorName)}}
+               
+
+
+                    <input type="button" class="form-control" value="Save Payment" class=" btn btn-default">
+
+                </form>
+            </div>
+            <!-- /.panel-body -->
+        </div>
+    </div>
+
+
+    <div class=" col-sm-offset-4 col-sm-2">
+            <div class="row">
+                
+                <div id="invoice-POS" style="direction:rtl">
+
+                    <center id="top">
+                      <div class="info">
+                        <h2> افغان روغتون </h2>
+                      </div>
+                      <!--End Info-->
+                    </center>
+                    <!--End InvoiceTop-->
+                
+                    <div id="m">
+                      <div class="info">
+                        <h2 id=result>د ډاکټر رسید</h2>
+                        <div>
+                               
+                            <p>د مریض ای ډی: <span id="pId" class="pull-left" ></span> </p>
+                            <p>د مریض نوم: <span id = "patientName" class="pull-left" ></span> </p>
+                            <p> وطاق: <span id = "room" class="pull-left" ></span> </p>
+                            <p>د ډاکټر نوم: <span id = "doctorName" class="pull-left" ></span> </p>
+                            <p>فیس: <span id = "fee" class="pull-left" ></span> </p>
+                            <p>جنس: <span id="gender" class="pull-left" ></span> </p>
+                            <p>عمر: <span id="age" class="pull-left" ></span> </p>
+                            <p>تاریخ: <span id = "visitDate" class="pull-left" ></span> </p>
+                            <hr>
+                    
+                            <table>
+                                   
+                               
+                                <tr>
+                                    <td>ټوټل</td>
+                                    <td class="netAmount" ></td>
+                                </tr>
+                                   
+                            </table>
+                            <hr>
+                           
+                          
+                          
+
+                        </div>
+                      </div>
+                    </div>
+                    <!--End Invoice Mid-->
+                
+                    <div id="b">
+                      <div id="table">
+                      
+                      </div>
+                      <!--End Table-->
+                
+                      <div id="legalcopy" class="text-center">
+                            <p class="legal"><strong> د شکایاتو لپاره له لاندی شمیری سره تماس ونیسی </strong> <br> ۰۷۰۰۴۴۵۵۳۳
+                            </p>
+                          </div>
+                
+                    </div>
+                    <!--End InvoiceBot-->
+                  </div>
+          
+            </div>
+        </div>
+</div>
+
+{% endblock %}
+
+{% block print %}
+<script src="{{ url_for('static',    filename='vendor/jquery/printThis.js') }}"></script>
+
+
+{% endblock %}
+
+{% block head_js %}
+<script src="{{ url_for('static',    filename='vendor/jquery/select2.min.js') }}"></script>
+
+
+<script>
+
+$('#g').select2({
+    placeholder:'ډاکټر انتخاب کړی',
+    allowClear:true
+});
+
+
+$('.a').on("click", function () {
+      $('.b').printThis({
+
+        debug: false, // show the iframe for debugging
+        importCSS: true, // import parent page css
+        importStyle: false, // import style tags
+        printContainer: true, // print outer container/$.selector
+        loadCSS: "", // path to additional css file - use an array [] for multiple
+        pageTitle: "", // add title to print page
+        removeInline: false, // remove inline styles from print elements
+        removeInlineSelector: "*", // custom selectors to filter inline styles. removeInline must be true
+        printDelay: 333, // variable print delay
+        header: null, // prefix to html
+        footer: null, // postfix to html
+        base: false, // preserve the BASE tag or accept a string for the URL
+        formValues: true, // preserve input/form values
+        canvas: false, // copy canvas content
+        doctypeString: '...', // enter a different doctype for older markup
+        removeScripts: false, // remove script tags from print content
+        copyTagClasses: false, // copy classes from the html & body tag
+        beforePrintEvent: null, // function for printEvent in iframe
+        beforePrint: null, // function called before iframe is filled
+        afterPrint: null     // function called before iframe is removed
+
+      });
+    });
+
+$("#g").change(function(){
+
+    var doctorID = $('#g').val();
+    var patientID = $('input[name = patientID]').val();
+     $('input[name = discount]').val(0);
+    var data = {
+        doctorID:doctorID,
+        patientID:patientID
+    };
+    console.log(data);
+    data = JSON.stringify(data);
+
+    $.ajax({
+        url:'/getpatientReport',
+        type: 'POST',
+        data: data,
+        contentType: 'application/json; charset = UTF-8',
+        cache:false,
+        success: function(response){
+            console.log(response);
+
+
+
+             $('#room').text(response[0]['roomNumber']);
+             $('#doctorName').text(response[0]['employeeName']);
+            $('#patientName').text(response[0]['patientName']);
+            $('#pId').text(response[0]['patientId']);
+             $('#visitDate').text(response[0]['visitDate']);
+             $('#age').text(response[0]['patientAge']);
+             $('#gender').text(response[0]['gender']);
+            $('#fee').text(response[0]['fee']);
+            $('.netAmount').text(response[0]['fee']);
+
+        },
+        error:function(response){
+            console.log("Error")
+        }
+
+    });
+
+
+        $('.discount').on("change keyup blur",function(){
+                $('input[name = discount]').val($('.discount').val())
+                var main = $('#fee').text();
+                var disc = $('.discount').val();
+                var dec = (disc/100).toFixed(2);
+                var mult = main*dec;
+                var discount = main-mult;
+                $('.netAmount').val(discount);
+
+        });
+
+
+
+
+
+});
+
+$('input[type = button]').click(function(){
+
+    var a = $('input[name = patientID]').val();
+    var b = $('select[name = doctorName]').val();
+ console.log(b)
+
+ data = {
+
+    patientId: a,
+    doctorId:b
+
+ }
+
+ data = JSON.stringify(data);
+
+
+$.ajax({
+    url:'/adddoctorPayment',
+    type: 'POST',
+    data: data,
+    contentType: 'application/json; charset = UTF-8',
+    cache:false,
+    success: function(response){
+
+        $('#invoice-POS').printThis();
+
+    },
+    error:function(response){
+        console.log("Error")
+    }
+
+});
+
+
+
+})
+
+
+//  alert(a);
+
+ console.log(a, b)
+
+
+
+
+
+
+
+    </script>
+{% endblock %}

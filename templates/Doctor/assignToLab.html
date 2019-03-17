@@ -1,0 +1,86 @@
+
+{% extends "Doctor/master.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static',filename='vendor/datatables-plugins/dataTables.bootstrap.css') }}">
+
+  <!-- DataTables Responsive CSS -->
+  <!-- <link href="static/vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet"> -->
+<link rel="stylesheet" href="{{ url_for('static' ,filename='vendor/datatables-responsive/dataTables.responsive.css') }}">
+<link rel="stylesheet" href="{{ url_for('static' ,filename='css/select2.min.css') }}">
+
+
+{% endblock %}
+
+{% block body %}
+
+
+
+<div id="wrapper">
+
+        <!-- Navigation -->
+        
+        
+       
+    <div id="page-wrapper">
+
+            <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header"></h1>
+                    </div>
+                    <!-- /.col-lg-12 -->
+                  </div>
+            
+        <div class = "container-fluid">
+         
+                    <div class="panel panel-default">
+                        <div class="panel-heading ">
+                            <h4></h4>
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <form action="{{url_for('addPatientTest')}}">
+                            
+                           
+                         {{ wtf.form_field(form.testId)}}
+                         {{ wtf.form_field(form.testName) }}
+
+
+                            
+                            <button type="submit" class = "btn bg-green" id = "drugRegistraion" > ثبتول </button>
+                        </form>
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+              
+
+{% endblock %}
+
+{% block head_js %}
+<!-- <script src="../vendor/datatables/js/jquery.dataTables.min.js"></script> -->
+<script src="{{ url_for('static',filename='vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
+
+<!-- <script src="../vendor/datatables-plugins/dataTables.bootstrap.min.js"></script> -->
+<script src="{{ url_for('static',filename='vendor/datatables-plugins/dataTables.bootstrap.min.js') }}"></script>
+
+<!-- <script src="../vendor/datatables-responsive/dataTables.responsive.js"></script> -->
+<script src="{{ url_for('static',filename='vendor/datatables-responsive/dataTables.responsive.js') }}"></script>
+<script src="{{ url_for('static',    filename='vendor/jquery/select2.min.js') }}"></script>
+
+
+<script>
+
+$('#g').select2();
+
+    $(document).ready(function() {
+
+            $('#dataTables-example').DataTable({
+                responsive: true
+            });
+        
+        });
+    
+    </script>
+{% endblock %}

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>افغان اعظمی کلینیک</title>
+    <style>
+
+    </style>
+
+    <!-- Bootstrap Core CSS -->
+
+    <link rel="stylesheet" href="{{ url_for('static',    filename='vendor/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static' ,filename='css/select2.min.css') }}">
+
+
+
+    <!-- MetisMenu CSS -->
+    <link rel="styleshee.sidebar{
+        text-align: right;
+    }t" href="{{ url_for('static',    filename='vendor/metisMenu/metisMenu.min.css') }}">
+
+    {% block head %}
+    {% endblock %}
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static',    filename='dist/css/sb-admin-2.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',    filename='dist/css/PashtoFont.css') }}">
+
+
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <link rel="stylesheet" href="{{ url_for('static',    filename='vendor/font-awesome/css/font-awesome.min.css') }}">
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <span href="" class = "t navbar-brand"> <i class = "fa fa-bars"  id='1'></i> </span>
+                <a class="navbar-brand" href="{{ url_for('home') }}">افغان معالجوی روغتون</a>
+            </div>
+            <!-- /.navbar-header -->
+
+            <ul class="nav navbar-top-links navbar-left">
+
+
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-bell fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+               
+                    <!-- /.dropdown-alerts -->
+                </li>
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" id = "fu" href="#">
+                        <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu ">
+                        {% if call_or_get(current_user.is_authenticated) %}
+                        <li><a href="#"><i class="fa fa-user fa-fw"></i>{{ current_user.username or current_user.email }}</a>
+                        </li>
+                        <li><a href="{{url_for('user.logout')}}"><i class="fa fa-sign-out fa-fw"></i>Sign out</a>
+                        </li>
+
+                        <li class="divider"></li>
+                        {% else %}
+                        <li><a href="{{url_for('user.login')}}"><i class="fa fa-sign-in fa-fw"></i>Login</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+            <!-- /.navbar-top-links -->
+            {% block sidebar %}
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <li class="sidebar-search">
+                            <div class="input-group custom-search-form">
+                                <input type="text" class="form-control" placeholder="Search...">
+                                <span class="input-group-btn">
+                                <button class="btn btn-default" type="button">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                            </div>
+                            <!-- /input-group -->
+                        </li>
+                        <li>
+                            <a href="{{ url_for('home') }}">  <i class="fa fa-dashboard fa-fw"></i> کورپاڼه </a>
+                        </li>
+                        <li>
+                                <a href="#"><i class="fa fa-sitemap fa-fw"></i><span class="fa arrow"></span>راپورونه</a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="{{url_for('pharmicyreport', filter='n')}}">د درملتون راپور</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{url_for('clinicReport')}}">د کلینیک راپور</a>
+                                    </li>
+
+                                </ul>
+                                      </li>
+                        <li>
+                                <a href="#"><i class="fa fa-sitemap fa-fw"></i><span class="fa arrow"></span>درملتون</a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="{{ url_for('drug', drugId = 'None') }}">دوا</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ url_for('sale') }}">خرڅول</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ url_for('saleReport') }}">د خرڅلاو راپور</a>
+                                    </li>
+                                    <li>
+                                            <a href="{{ url_for('purchaseRig') }}">رانیول</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{url_for('purchase')}}">د رانیولو راپور</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ url_for('returns') }}">بیرته ګرځیدلې دوا</a>
+                                        </li>
+                                </ul>
+                             </li>
+                        <li>
+                            <a href="{{url_for('patient', report='n')}}"><i class="fa fa-bed fa-fw"></i>ناروغ</a>
+                        </li>
+
+                        <li>
+                            <a href="{{ url_for('doctor', doctorId='None') }}"><i class="fa fa-user-md fa-fw"></i> ډاکټر</a>
+                        </li>
+                        <li>
+                            <a href="{{url_for('user')}}"><i class="fa fa-user fa-fw"></i> کارونکي</a>
+                        </li>
+                       
+                        <li>
+                            <a href="{{url_for('employee', salaryId = 'None', employeeId = 'None')}}"><i class="fa fa-users fa-fw"></i> کارکونکی</a>
+                        </li>
+
+
+
+
+
+                        <li>
+
+                            <a href="{{url_for('backup', type='none')}}"><i class="fa fa-hdd-o fa-fw"></i>خوندی کول</a>
+                        </li>
+
+
+                    </ul>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+            {% endblock %}
+        </nav>
+
+        <div id="page-wrapper">
+
+
+            <!-- /.row -->
+            {% block content %}
+            {% endblock %}
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+
+    <!-- <script src="../vendor/jquery/jquery.min.js"></script> -->
+    <script src="{{ url_for('static',    filename='vendor/jquery/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static',    filename='vendor/jquery/select2.min.js') }}"></script>
+    <script src="{{ url_for('static',    filename='vendor/jquery/mousetrap.min.js') }}"></script>
+
+    {% block print %}
+
+    {% endblock %}
+    <!-- Bootstrap Core JavaScript -->
+    <!-- <script src="../vendor/bootstrap/js/bootstrap.min.js"></script> -->
+    <script src="{{ url_for('static',    filename='vendor/bootstrap/js/bootstrap.min.js') }}"></script>
+
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <!-- <script src="../vendor/metisMenu/metisMenu.min.js"></script> -->
+    <script src="{{ url_for('static',    filename='vendor/metisMenu/metisMenu.min.js') }}"></script>
+
+    {% block head_js %}
+    {% endblock %}
+   
+
+
+    <!-- Custom Theme JavaScript -->
+    <!-- <script src="../dist/js/sb-admin-2.js"></script> -->
+    <script src="{{ url_for('static',    filename='dist/js/sb-admin-2.js') }}"></script>
+
+    <script>
+        $(".t").click(function(){
+
+            $(".sidebar").toggle();
+            if(parseInt($("#page-wrapper").css("marginRight"))== 250){
+               $("#page-wrapper").css("marginRight","0");
+            }
+           else if(parseInt($("#page-wrapper").css("marginRight"))== 0){
+               $("#page-wrapper").css("marginRight","250px");
+           }
+
+           $(".h").click(function(){
+               $(".sidebar").show();
+           });
+       });
+
+function request() {
+
+    $('#notification').empty();
+
+    var nowDate=new Date();
+
+    if (nowDate.getDate()>=28){
+        $('#notification').append('<li><a href="#"><div><i class="fa fa-money fa-fw"></i>Salary Time is near<span class="pull-right text-muted small">Date: '+nowDate.getFullYear()+"/"+nowDate.getMonth()+"/"+nowDate.getDate()+'</span></div></a></li><li class="divider"></li>');
+        //console.log('Its time for salary');
+    }
+
+    setTimeout(request, 60000);
+
+    $.ajax({
+        url: "/stock",
+        type: "POST",
+        data: '1',
+        contentType: "application/json; charset=utf-8",
+        success: function(dat) {
+            for (let i=0; i<dat.result.length; i++){
+                if (dat.result[i].pTotal-dat.result[i].sTotal<10){
+                    $('#notification').append('<li><a href="#"><div><i class="fa fa-tasks fa-fw"></i>'+dat.result[i].drugName+'<span class="pull-right text-muted small">Stock is '+(dat.result[i].pTotal-dat.result[i].sTotal)+'</span></div></a></li><li class="divider"></li>');
+                    //console.log("Total Purchase of "+dat.result[i].drugName+" is "+dat.result[i].pTotal);
+                    //console.log("Total Sale of "+dat.result[i].drugName+" is "+dat.result[i].sTotal);
+                    //console.log("Stock of "+dat.result[i].drugName+" is "+(dat.result[i].pTotal-dat.result[i].sTotal));
+                }
+                //getDate(dat.result[i].drugId);
+                //console.log('alright');
+                $.ajax({
+                    url: "/drugDate",
+                    type: "POST",
+                    data: dat.result[i].drugId.toString(),
+                    contentType: "application/json; charset=utf-8",
+                    success: function(data) {
+                        var date=new Date(data.result.drugExpirDate);
+
+                        date.setMonth(date.getMonth());
+                        if ((date.getMonth()-nowDate.getMonth())<=3){
+                            //console.log("We have "+(dat.result[i].pTotal-dat.result[i].sTotal)+" pics "+dat.result[i].drugName+" and is Going to expire on "+date.getFullYear()+"/"+date.getMonth()+"/"+date.getDate()+" After "+(date.getMonth()-nowDate.getMonth())+" Month(s) ");
+                            $('#notification').append('<li><a href="#"><div><i class="fa fa-tasks fa-fw"></i> '+dat.result[i].drugName+' Stock is '+(dat.result[i].pTotal-dat.result[i].sTotal)+'<span class="pull-right text-muted small"> Expire on '+date.getFullYear()+"/"+date.getMonth()+"/"+date.getDate()+' After '+(date.getMonth()-nowDate.getMonth())+' Month(s)</span></div></a></li><li class="divider"></li>');
+
+                            //console.log(nowDate.getMonth());
+                            //console.log(data.result);
+                            //console.log(date.getFullYear());
+                            //console.log(date.getMonth());
+                            //console.log(date.getDate());
+                        }
+                    }
+                });
+            }
+        }
+    });
+}
+
+/*function getDate(id){
+    $.ajax({
+        url: "/drugDate",
+        type: "POST",
+        data: id.toString(),
+        contentType: "application/json; charset=utf-8",
+        success: function(data) {
+            var date=new Date(data.result.drugExpirDate);
+            var nowDate=new Date();
+            date.setMonth(date.getMonth()+3);
+            if (date.getMonth()==nowDate.getMonth()){
+
+                console.log(nowDate.getMonth());
+                console.log(data.result);
+                console.log(date.getFullYear());
+                console.log(date.getMonth());
+                console.log(date.getDate());
+            }
+        }
+    });
+}*/
+
+$(document).ready(function(){
+//$('#notification').empty();
+request();
+});
+</script>
+
+</body>
+
+</html>

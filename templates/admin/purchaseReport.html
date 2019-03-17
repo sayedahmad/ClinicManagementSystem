@@ -1,0 +1,210 @@
+
+  {% extends "admin/master.html" %}
+
+  {% block head %}
+  <link rel="stylesheet" href="{{ url_for('static',filename='vendor/datatables-plugins/dataTables.bootstrap.css') }}">
+
+    <!-- DataTables Responsive CSS -->
+    <!-- <link href="static/vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet"> -->
+  <link rel="stylesheet" href="{{ url_for('static' ,filename='vendor/datatables-responsive/dataTables.responsive.css') }}">
+
+{% endblock %}
+
+  {% block content %}
+  <div class = "container-fluid">
+  <!-- <div class="row" >
+    <div class="report" style="margin-top:20px">
+ 
+    <form action="{{ url_for('purchaseReport') }}">
+                <div class="form-group">
+                    <label>DrugId</label>
+                    <input type="text" class="form-control" name = "drugId">
+
+                </div>
+            </a>
+        </div>
+    <div class='col-sm-8'>
+        <div class="col-sm-6">
+            <div class="form-group">
+                <div class='input-group date' id='datetimepicker1'>
+                    <span class="input-group-addon">
+                        <span>From</span>
+                    </span>
+                    <input type='date' class="form-control" name="from"/>
+                </div>
+                <div class="form-group">
+                    <div class='input-group date' id='datetimepicker1'>
+                        <span class="input-group-addon">
+                            <span>To</span>
+                        </span>
+                        <input type='date' class="form-control" name="to"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class='input-group date' id='datetimepicker1'>
+                        <span class="input-group-addon">
+                            <span>Expire On</span>
+                        </span>
+                        <input type='date' class="form-control" name="expireOn"/>
+                    </div>
+                </div>
+
+
+            <div class="col-sm-6">
+                <input type="submit" class = "btn btn-primary" style="margin-bottom:20px" value="Get Report">
+            </div>
+        </form>
+
+
+    </div>
+</div>
+</div>
+
+</div> -->
+<div class="row">
+    <div class="col-md-12">
+          <div class="page-header"></div>
+    </div>
+</div>
+  </div>
+
+<div class = "container-fluid">
+        <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                                <form action="{{ url_for('purchaseReport') }}" class="form form-inline" >
+                                        <div class="form-group">
+                                                <select type="text" class="form-control" name="drugId" style="width:200px">
+                                                    <option value=""></option>
+                                                </select>
+                                            </div>
+                                            
+                                            <div class="form-group">
+                                                    <div class='input-group date' id='datetimepicker1'>
+                                                        <span class="input-group-addon">
+                                                            <span> له </span>
+                                                        </span>
+                                                        <input type='date' class="form-control" name="from"/>
+                                                    </div>
+                                            </div>
+                                                    <div class="form-group">
+                                                            <div class='input-group date' id='datetimepicker1'>
+                                                                <span class="input-group-addon">
+                                                                    <span> څخه </span>
+                                                                </span>
+                                                                <input type='date' class="form-control" name="to"/>
+                                                            </div>
+                                                        </div>
+                                    
+                                                        <div class="form-group">
+                                                                <div class='input-group date' id='datetimepicker1'>
+                                                                    <span class="input-group-addon">
+                                                                        <span> د وخت تیریدو تاریخ </span>
+                                                                    </span>
+                                                                    <input type='date' class="form-control" name="expireOn"/>
+                                                                </div>
+                                                            </div>
+                                       
+                                        <div class="form-group">
+                                                <input type="submit" class = "btn btn-primary" value=" پلټنه ">
+                                            </div>
+                                            
+                              </form>                     
+                               </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
+                              <thead>
+                                  <tr>
+                                      <th hidden = true >ID</th>
+                                      <th> د رانیولو تاریخ  </th>
+                                      <th> دوا </th>
+                                      <th>تعداد</th>
+                                      <th>قیمت</th>
+                                      <th> مقدار </th>
+                                      <th> د وخت تیریدو تاریخ </th>
+
+                                  </tr>
+                              </thead>
+                              <tbody>
+                              {% for d in data %}
+                                  <tr>
+                                      <td hidden=true>{{ d.purchaseId }}</td>
+                                      <td>{{ d.purchaseDate }}</td>
+                                      <td>{{ d.drugName }}</td>
+                                      <td>{{ d.drugQuantity }}</td>
+                                      <td>{{ d.drugPrice }}</td>
+                                      <td>{{ d.drugPrice*d.drugQuantity }}</td>
+                                      <td>{{ d.drugExpirDate }}</td>
+
+                                  </tr>
+                                  {% endfor %}
+                              </tbody>
+                            </table>
+                            <!-- /.table-responsive -->
+
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+</div>
+
+{% endblock %}
+
+{% block head_js %}
+<!-- <script src="../vendor/datatables/js/jquery.dataTables.min.js"></script> -->
+<script src="{{ url_for('static',filename='vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
+
+<!-- <script src="../vendor/datatables-plugins/dataTables.bootstrap.min.js"></script> -->
+<script src="{{ url_for('static',filename='vendor/datatables-plugins/dataTables.bootstrap.min.js') }}"></script>
+
+<!-- <script src="../vendor/datatables-responsive/dataTables.responsive.js"></script> -->
+<script src="{{ url_for('static',filename='vendor/datatables-responsive/dataTables.responsive.js') }}"></script>
+
+<script>
+
+
+$.ajax({
+        url:'/getPurchasedDrugNames',
+        type: 'POST',
+        contentType: 'application/json; charset = UTF-8',
+        cache:false,
+        success: function(response){
+            
+                $('select[name = drugId]').select2({
+                    placeholder:' دوا انتخاب کړی',
+                    tags:true,
+                    data:response
+                });
+
+
+          
+
+        },
+        error:function(response){
+            console.log("Error")
+        }
+
+    });
+
+            
+
+    $(document).ready(function() {
+
+            $('#dataTables-example').DataTable({
+                responsive: true
+            });
+
+        });
+
+    </script>
+     <script>
+        $(function () {
+            $('#datetimepicker1').datetimepicker();
+        });
+    </script>
+{% endblock %}

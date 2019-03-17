@@ -1,0 +1,250 @@
+
+{% extends "recieption/master.html" %}
+
+
+
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static',filename='vendor/datatables-plugins/dataTables.bootstrap.css') }}">
+
+  <!-- DataTables Responsive CSS -->
+  <!-- <link href="static/vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet"> -->
+<link rel="stylesheet" href="{{ url_for('static' ,filename='vendor/datatables-responsive/dataTables.responsive.css') }}">
+<link rel="stylesheet" href="{{ url_for('static',    filename='vendor/bootstrap/css/bill.css') }}">
+<style>
+
+  tr>th>td{
+  
+    border: 2px solid black;
+
+  }
+</style>
+
+{% endblock %}
+
+{% block body %}
+
+<div class="row" style="margin-top:20px">
+  
+    <div class="col-sm-12 pull-right">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                  <div class="input-group ">
+                      <input type="text" class="form-control" placeholder="Search...">
+                      <span class="input-group-btn">
+                      <button class="btn btn-default" type="button">
+                          <i class="fa fa-search"></i>
+                      </button>
+                  </span>
+                 
+              </div>
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
+                        <thead>
+                            <tr>
+                                <th hidden = true >Visit ID</th>
+                                <th> د مریض نوم </th>
+                                <th> د ډاکټر نوم </th>
+                                <th> د معایناتو شمیره </th>
+                                <th>ټوټل</th>
+                                <th>اداینه</th>
+                                <th>تغیرول</th>
+                               
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for payment in dataList %}
+                          <tr>
+                              <td hidden = true >{{payment.visitId}}</td>
+                              <td>{{payment.patientName.decode('utf-8')}}</td>
+                              <td>{{payment.employeeName.decode('utf-8')}}</td>
+
+                            <td> <a class ="bill">{{payment.count}}</a> </td>
+                              <td>{{payment.Total}}</td>
+                              <td>{{'تصفیه'}}</td>
+
+
+
+                             
+                            
+                              <td>
+                                  
+                                    <a href="{{ url_for('unpayLab', visitId = payment.visitId  )}}"><button onclick="return confirm('ar you sure')" class= "update btn btn-danger btn-sm"><i class ="fa fa-trash fa-large"></i> </button></a>
+                       
+
+                                
+                              </td> 
+
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                    </table>
+                    <!-- /.table-responsive -->
+                    
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
+
+   
+    
+</div>
+
+{% endblock %}
+
+{% block head_js %}
+<!-- <script src="../vendor/datatables/js/jquery.dataTables.min.js"></script> -->
+<script src="{{ url_for('static',filename='vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
+
+<!-- <script src="../vendor/datatables-plugins/dataTables.bootstrap.min.js"></script> -->
+<script src="{{ url_for('static',filename='vendor/datatables-plugins/dataTables.bootstrap.min.js') }}"></script>
+
+<!-- <script src="../vendor/datatables-responsive/dataTables.responsive.js"></script> -->
+<script src="{{ url_for('static',filename='vendor/datatables-responsive/dataTables.responsive.js') }}"></script>
+
+<script>
+
+
+
+  $('.print').click(function(){
+
+    var visitId = $(this).closest("tr").find("td:first-child").text();
+    var payment = $(this).closest("tr").find("td:nth-child(6)").text();
+
+    var data = {
+      visitId : visitId,
+      payment: payment
+    };
+
+    data = JSON.stringify(data);
+
+
+
+  
+$.ajax({
+    url:'/payLab',
+    type: 'POST',
+    data: data,
+    contentType: 'application/json; charset = UTF-8',
+    cache:false,
+    success: function(response){
+
+      if(response == 'paid'){ 
+
+      $('#invoice-POS').printThis();
+      
+      }
+       
+
+    },
+    error:function(response){
+        console.log("Error")
+    }
+
+});
+
+
+
+
+
+  });
+
+
+$(".bill").click(function(){
+
+var visitId = $(this).closest("tr").find("td:first-child").text();
+var docterName = $(this).closest("tr").find("td:nth-child(2)").text();
+var patientName = $(this).closest("tr").find("td:nth-child(3)").text();
+var payment = $(this).closest("tr").find("td:nth-child(6)").text();
+
+
+// console.log(data);
+data = JSON.stringify(visitId);
+
+$.ajax({
+    url:'/getTestPayment',
+    type: 'POST',
+    data: data,
+    contentType: 'application/json; charset = UTF-8',
+    cache:false,
+    success: function(response){
+
+            console.log(response);
+
+            for(var i =0; i<response.length; i++){
+       
+
+var No= i+1
+
+
+         
+      $('#tests').append(
+
+            `
+            <tr class=service >
+            <td class=tableitem style='cursor: pointer' > <p class=itemtext >${No}</p></td>
+          
+            <td class=tableitem style='cursor: pointer' > <p class=itemtext >${response[i]['Name']} </p></td>
+            <td></td>
+            <td class=tableitem style='cursor: pointer' > <p class=itemtext >${response[i]['Amount']}</p></td>
+        
+          
+            </tr>
+
+            `
+
+      );
+
+        }
+
+        $('#docterName').text(docterName);
+        $('#patientName').text(patientName);
+        $('#visiId').text(visitId);
+        $('#total').text(totalAmount);
+
+
+    },
+    error:function(response){
+        console.log("Error")
+    }
+
+});
+
+
+
+
+    $('.discount').on("change keyup blur",function(){
+
+            // console.log($('.discount').text());
+            var main = $('.fee').text();
+            var disc = $('.discount').text();
+            var dec = (disc/100).toFixed(2);
+            var mult = main*dec;
+            var discount = main-mult;
+            $('.netAmount').text(discount);
+
+    });
+
+
+
+
+
+});
+
+
+
+
+    $(document).ready(function() {
+
+            $('#dataTables-example').DataTable({
+                responsive: true
+             
+            });
+        
+        });
+    
+    </script>
+{% endblock %}

@@ -1,0 +1,256 @@
+
+{% extends "Doctor/master.html" %}
+
+
+
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static',filename='vendor/datatables-plugins/dataTables.bootstrap.css') }}">
+
+  <!-- DataTables Responsive CSS -->
+  <!-- <link href="static/vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet"> -->
+<link rel="stylesheet" href="{{ url_for('static' ,filename='vendor/datatables-responsive/dataTables.responsive.css') }}">
+<link rel="stylesheet" href="{{ url_for('static' ,filename='css/select2.min.css') }}">
+
+
+{% endblock %}
+
+{% block body %}
+
+<div class="row" style="margin-top:20px">
+  
+    <div class="col-sm-12" id = "tbl" >
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                  <div class="input-group ">
+                      <input type="text" class="form-control" placeholder="Search...">
+                      <span class="input-group-btn">
+                      <button class="btn btn-default" type="button">
+                          <i class="fa fa-search"></i>
+                      </button>
+                  </span>
+                 
+              </div>
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
+                        <thead>
+                            <tr>
+                                <th hidden = true >test ID</th>
+                                <th hidden = true >Visit Id</th>
+                                <th> د مریض نوم </th>
+                                <th> د معاينات نوم </th>
+                                <th>اکشن</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                                {% for test in testResult %}
+                                <tr>
+                                    <td hidden = true >{{ test.testId }}</td>
+                                    
+                                    <td hidden = true >{{ test.visitId }}</td>
+                                    <td>{{ test.patientName.decode('UTF-8') }}</td>
+
+                                    <td>{{ test.Name }}</td>
+
+                                   
+                                
+                                  
+                            <td>
+                                    <button    class= "update btn btn-warning btn-sm"><i class ="fa fa-edit"></i> </button>
+                                    <a href="{{ url_for('removeTest', testId=test.testId, visitId =test.visitId )}}"><button onclick="return confirm('ar you sure')" class= " btn btn-danger btn-sm"><i class ="fa fa-trash fa-large"></i> </button></a>
+
+    
+                            </td>
+                                
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                    </table>
+                    <!-- /.table-responsive -->
+                    
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
+
+        <div class="col-sm-3  " style="display: none;">
+            <div class="panel panel-default">
+                <div class="panel-heading ">
+                    <h4> معایناتو ته تغیر ورکول </h4>
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <form action="{{url_for('updateTest')}}" >
+                        <div class="form-group">
+                      <input class="form-control testId " type="hidden" name = "testId" placeholder="Mohsin">
+                      </div>
+
+                      <div class="form-group">
+                        <input class="form-control visitId " type="hidden" name = "visitId" placeholder="Mohsin">
+                        </div>
+
+
+                      <div class="form-group">
+                        <select class="js-example-basic-single form-control" name="testTypeId" style="width: 100%">
+                            <option value=""></option>
+                             
+                            </select>
+                        </div>                       
+                    
+                        <button class = "btn btn-default btn-sm" type="submit"  > تغیر </button>
+                     </form>
+                </div>
+                <!-- /.panel-body -->
+            </div>
+        </div>
+    
+
+         
+
+  
+  
+  
+</div>
+
+{% endblock %}
+
+{% block head_js %}
+<!-- <script src="../vendor/datatables/js/jquery.dataTables.min.js"></script> -->
+<script src="{{ url_for('static',filename='vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
+
+<!-- <script src="../vendor/datatables-plugins/dataTables.bootstrap.min.js"></script> -->
+<script src="{{ url_for('static',filename='vendor/datatables-plugins/dataTables.bootstrap.min.js') }}"></script>
+
+<!-- <script src="../vendor/datatables-responsive/dataTables.responsive.js"></script> -->
+<script src="{{ url_for('static',filename='vendor/datatables-responsive/dataTables.responsive.js') }}"></script>
+<script src="{{ url_for('static',    filename='vendor/jquery/select2.min.js') }}"></script>
+
+
+<script>
+
+  $('Button[type = submit]').click(function(){
+
+    $('col-sm-3').css('display','none');
+    $('#tbl').addClass('col-sm-8').removeClass('col-sm-12');
+
+  })
+
+    $.ajax({
+            url:'/testNames',
+            type: 'POST',
+          
+            contentType: 'application/json; charset = UTF-8',
+            cache:false,
+            success: function(response){
+         
+
+                $('.js-example-basic-single').select2({
+
+                    placeholder:'معاینات انتخاب کړی',
+
+                  data:response
+
+                });
+
+              
+
+           
+                
+            },
+            error:function(response){
+                console.log("Error");
+            }
+
+        });
+
+
+
+$('.update').click( function(){
+    console.log(123);
+
+  $('#tbl').addClass('col-sm-8').removeClass('col-sm-12');
+  $('.col-sm-3').css('display','block');
+  
+  var testId = $(this).closest("tr").find("td:nth-child(1)").text();
+  var visitId = $(this).closest("tr").find("td:nth-child(2)").text();
+
+  $('.testId').val(testId);
+  $('.visitId').val(visitId);
+
+
+
+  var data = {
+    testId :testId,
+    visitId:visitId
+  };
+
+  data = JSON.stringify(data);
+
+
+              
+        
+
+        $.ajax({
+            url:'/getTestReport',
+            type: 'POST',
+            data: data,
+            contentType: 'application/json; charset = UTF-8',
+            cache:false,
+            success: function(response){
+                console.log();
+              
+                a = response[0]['Id'].toString();
+
+                $('.js-example-basic-single').select2("val", a);
+                 
+
+                  
+                 
+              
+
+            },
+            error:function(response){
+                console.log("Error");
+            }
+
+        });
+
+        
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+// $('.js-example-basic-single').select2({});
+
+
+
+
+      
+
+
+    $(document).ready(function() {
+
+            $('#dataTables-example').DataTable({
+                responsive: true
+            });
+        
+        });
+    
+    </script>
+
+   
+{% endblock %}

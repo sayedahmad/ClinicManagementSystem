@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" dir = "rtl">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Cilinic</title>
+
+    <!-- Bootstrap Core CSS -->
+    <!-- <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
+    
+    <link rel="stylesheet" href="{{ url_for('static',    filename='vendor/bootstrap/css/bootstrap.min.css') }}">
+
+    <!-- MetisMenu CSS -->
+    <!-- <link href="../vendor/metisMenu/metisMenu.min.css" rel="stylesheet"> -->
+    <link rel="stylesheet" href="{{ url_for('static',    filename='vendor/metisMenu/metisMenu.min.css') }}">
+    
+    {% block head %}
+
+    {% endblock %}
+    <!-- Custom CSS -->
+    <!-- <link href="../dist/css/sb-admin-2.css" rel="stylesheet"> -->
+    <link rel="stylesheet" href="{{ url_for('static',    filename='dist/css/sb-admin-2.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',    filename='dist/css/jquery-confirm.min.css') }}">
+
+
+
+    <!-- Morris Charts CSS -->
+    <!-- <link href="../vendor/morrisjs/morris.css" rel="stylesheet"> -->
+    <link rel="stylesheet" href="{{ url_for('static',    filename='vendor/morrisjs/morris.css') }}">
+
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <link rel="stylesheet" href="{{ url_for('static',    filename='vendor/font-awesome/css/font-awesome.min.css') }}">
+   
+
+ 
+        
+</head>
+
+<body>
+
+
+
+        
+       
+
+ 
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="{{url_for('recieptionView')}}">کورپاڼه</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav pull-right">
+       
+        <li><a href="{{url_for('addPatient')}}" data-toggle="tooltip" data-placement="bottom" id="addPatient" title="" data-original-title="Press F1"> مریض <span class="sr-only">(current)</span></a></li>
+
+        </li>
+        <li><a href="{{url_for('addTest')}}" data-toggle="tooltip" data-placement="bottom" id="addTest" title="" data-original-title="Press F4" >معاینات <span class="sr-only">(current)</span></a></li>
+        <li><a href="{{url_for('showDoterPayment')}}" data-toggle="tooltip" data-placement="bottom" id="docterPayment" title="" data-original-title="Press F5" > ډاکټر فیس <span class="sr-only">(current)</span></a></li>
+        <li><a href="{{url_for('showunpaidLab', filter = 'n', user = 'n')}}" data-toggle="tooltip" data-placement="bottom" id="docterPayment" title="" data-original-title="Press F5" > د معایناتو ناتادیه فیس <span class="sr-only">(current)</span></a></li>
+        <li><a href="{{url_for('showpaidLab')}}" data-toggle="tooltip" data-placement="bottom" id="docterPayment" title="" data-original-title="Press F5" >د معایناتو تادیه فیس <span class="sr-only">(current)</span></a></li>
+
+        
+      </ul>
+      <ul class="nav navbar-top-links navbar-left">
+
+
+          
+            <!-- /.dropdown -->
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" id = "fu" href="#">
+                    <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                </a>
+                <ul class="dropdown-menu ">
+                    {% if call_or_get(current_user.is_authenticated) %}
+                    <li><a href="#"><i class="fa fa-user fa-fw"></i>{{ current_user.username or current_user.email }}</a>
+                    </li>
+                    <li><a href="{{url_for('user.logout')}}"><i class="fa fa-sign-out fa-fw"></i>Sign out</a>
+                    </li>
+
+                    <li class="divider"></li>
+                    {% else %}
+                    <li><a href="{{url_for('user.login')}}"><i class="fa fa-sign-in fa-fw"></i>Login</a>
+                    </li>
+                    {% endif %}
+                </ul>
+                <!-- /.dropdown-user -->
+            </li>
+            <!-- /.dropdown -->
+        </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+       
+    
+     
+        <div class="container-fluid">
+            {% block body%}
+
+            {% endblock %}
+        </div>
+    <!-- <script src="../vendor/jquery/jquery.min.js"></script> -->
+    <script src="{{ url_for('static',    filename='vendor/jquery/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static',    filename='vendor/jquery/printThis.js') }}"></script>
+
+
+    <!-- Bootstrap Core JavaScript -->
+    <!-- <script src="../vendor/bootstrap/js/bootstrap.min.js"></script> -->
+    <script src="{{ url_for('static',    filename='vendor/bootstrap/js/bootstrap.min.js') }}"></script>
+
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <!-- <script src="../vendor/metisMenu/metisMenu.min.js"></script> -->
+    <script src="{{ url_for('static',    filename='vendor/metisMenu/metisMenu.min.js') }}"></script>
+
+
+     {% block head_js %}
+    {% endblock %}
+    <!-- <script src="../vendor/morrisjs/morris.min.js"></script> -->
+    <script src="{{ url_for('static',    filename='vendor/morrisjs/morris.min.js') }}"></script>
+
+    <!-- <script src="../data/morris-data.js"></script> -->
+    <script src="{{ url_for('static',    filename='data/morris-data.js') }}"></script>
+
+
+    <!-- Custom Theme JavaScript -->
+    <!-- <script src="../dist/js/sb-admin-2.js"></script> -->
+    <script src="{{ url_for('static',    filename='dist/js/sb-admin-2.js') }}"></script>
+    <script src="{{ url_for('static',    filename='dist/js/jquery-confirm.min.js') }}"></script>
+
+    <script src="{{ url_for('static',    filename='dist/js/mousetrap.min.js') }}"></script>
+
+
+    <script>
+
+    $("#page-wrapper").css("marginRight","0");
+    
+
+
+
+
+
+
+
+
+    </script>
+
+</body>
+
+</html>

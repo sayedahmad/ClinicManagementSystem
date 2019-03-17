@@ -1,0 +1,116 @@
+
+{% extends "Lab/master.html" %}
+
+
+
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static',filename='vendor/datatables-plugins/dataTables.bootstrap.css') }}">
+
+  <!-- DataTables Responsive CSS -->
+  <!-- <link href="static/vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet"> -->
+<link rel="stylesheet" href="{{ url_for('static' ,filename='vendor/datatables-responsive/dataTables.responsive.css') }}">
+<link rel="stylesheet" href="{{ url_for('static' ,filename='css/select2.min.css') }}">
+<style>
+
+th{
+    text-align: right
+}
+
+</style>
+
+{% endblock %}
+
+{% block body %}
+
+<div class="row" style="margin-top:20px">
+
+    <div class="col-sm-12" id = "tbl" >
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                  <div class="input-group ">
+                      <input type="text" class="form-control" placeholder="Search...">
+                      <span class="input-group-btn">
+                      <button class="btn btn-default" type="button">
+                          <i class="fa fa-search"></i>
+                      </button>
+                  </span>
+
+              </div>
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <table width="100%" class="table table-striped table-bordered table-hover"  id="dataTables-example">
+                        <thead >
+                            <tr>
+                               
+                                <th> د مریض نوم </th>
+                                <th> دمعایناتو نوم </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                                {% for test in testResult %}
+                                <tr>
+                                  
+                                    <td>{{ test.patientName.decode('utf-8') }}</td>
+
+                                    <td>{{ test.Name }}</td>
+
+
+
+
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                    </table>
+                    <!-- /.table-responsive -->
+
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
+
+
+
+
+
+
+</div>
+
+{% endblock %}
+
+{% block head_js %}
+<!-- <script src="../vendor/datatables/js/jquery.dataTables.min.js"></script> -->
+<script src="{{ url_for('static',filename='vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
+
+<!-- <script src="../vendor/datatables-plugins/dataTables.bootstrap.min.js"></script> -->
+<script src="{{ url_for('static',filename='vendor/datatables-plugins/dataTables.bootstrap.min.js') }}"></script>
+
+<!-- <script src="../vendor/datatables-responsive/dataTables.responsive.js"></script> -->
+<script src="{{ url_for('static',filename='vendor/datatables-responsive/dataTables.responsive.js') }}"></script>
+<script src="{{ url_for('static',    filename='vendor/jquery/select2.min.js') }}"></script>
+
+
+<script>
+
+  
+
+
+
+
+
+
+
+
+  
+
+function timedRefresh(timeoutPeriod) {
+	setTimeout("location.reload(true);",timeoutPeriod);
+}
+
+window.onload = timedRefresh(60000);
+    </script>
+
+{% endblock %}

@@ -1,0 +1,219 @@
+
+  {% extends "admin/master.html" %}
+
+  {% block head %}
+  <link rel="stylesheet" href="{{ url_for('static',    filename='vendor/bootstrap/css/bill.css') }}">
+
+    <!-- DataTables Responsive CSS -->
+    <!-- <link href="static/vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet"> -->
+
+
+{% endblock %}
+
+  {% block content %}
+
+
+
+<div class = "container-fluid">
+   
+    <div class="row" style="margin-top:20px">
+        <div class="col-sm-offset-4 col-sm-4 ">
+
+            <div class="form-group justify-content-center">
+            <input type="text" name="code" id="code" class="form-control" placeholder="Use BCR or type here">
+        </div>
+    </div>
+    </div>
+    <div class="row">
+        <div class=" col-sm-12">
+                <div id="invoice-POS">
+  
+                        <center id="top">
+                          <div class="logo"></div>
+                          <div class="info">
+                            <h2>SBISTechs Inc</h2>
+                          </div>
+                          <!--End Info-->
+                        </center>
+                        <!--End InvoiceTop-->
+                    
+                        <div id="m">
+                          <div class="info">
+                            <h2 id="result">Contact Info</h2>
+                            <p>
+                              Address : street city, state 0000</br>
+                              Email : JohnDoe@gmail.com</br>
+                              Phone : 555-555-5555</br>
+                            </p>
+                          </div>
+                        </div>
+                        <!--End Invoice Mid-->
+                    
+                        <div id="b">
+                          <p class="billNo">0</p>
+                          <div id="table">
+                            <table name=sellData class="ohh">
+                              <tr class="tabletitle">
+                                <td class="item">
+                                  <h2>Item</h2>
+                                </td>
+                                <td class="Hours">
+                                  <h2>Qty</h2>
+                                </td>
+                                <td class="Hours">
+                                  <h2>Price</h2>
+                                </td>
+                                <td class="Rate">
+                                  <h2>Sub Total</h2>
+                                </td>
+                              </tr>
+                    
+                              
+                    
+                              <tr class="service">
+                                <td class="tableitem" style="cursor: pointer;">
+                                  <p class="itemtext">Animation Revisions</p>
+                                </td>
+                                <td class="tableitem" hidden>
+                                  <p class="itemtext">5</p>
+                                </td>
+                                <td class="tableitem" contenteditable='true'>
+                                  <p class="itemtext">10</p>
+                                </td>
+                                <td class="tableitem" contenteditable='true'>
+                                  <p class="itemtext">72</p>
+                                </td>
+                                <td class="tableitem">
+                                  <p class="itemtext">$750.00</p>
+                                </td>
+                              </tr>
+                    
+                              <tr class="tabletitle" name='total'>
+                                <td></td>
+                                <td></td>
+                                <td class="Rate">
+                                  <h2>Total</h2>
+                                </td>
+                                <td class="payment">
+                                  <h2 name="fullTotal">$3,644.25</h2>
+                                </td>
+                              </tr>
+                    
+                            </table>
+                          </div>
+                          <!--End Table-->
+                    
+                          <div id="legalcopy">
+                            <p class="legal"><strong>Thank you for your business!</strong>  Payment is expected within 31 days; please process this invoice within that time. There will be a 5% interest charge per month on late invoices.
+                            </p>
+                          </div>
+                    
+                        </div>
+                        <!--End InvoiceBot-->
+                </div>
+        </div>
+    </div>
+    
+    <!--End Invoice-->
+  <br>
+  <center><input type="submit" name="send" value="Sell"></center>
+  
+</div>
+          
+
+{% endblock %}
+
+{% block head_js %}
+<!-- <script src="../vendor/datatables/js/jquery.dataTables.min.js"></script> -->
+
+<!-- <script src="../vendor/datatables-plugins/dataTables.bootstrap.min.js"></script> -->
+
+<!-- <script src="../vendor/datatables-responsive/dataTables.responsive.js"></script> -->
+
+<script>
+    $(function(){
+
+    var arr=[];
+
+    function collect(){
+      arr=[];
+      $('.ohh tr.service').each(function() {
+        var cells = $('td>p', this);
+        cells.last().text(cells.eq(2).text() * cells.eq(3).text());
+        arr.push ({
+          "product": cells.eq(0).text(),
+          "productId": cells.eq(1).text(),
+          "qty": cells.eq(2).text(),
+          "price": cells.eq(3).text(),
+          "billNo": $('p.billNo').text()
+        });
+      });
+      var sum = 0;
+      $(".ohh tr.service").each(function() {
+
+        var cells = $('td>p', this);
+        sum+=parseFloat(cells.last().text());
+      });
+      $('h2[name="fullTotal"]').text(sum);
+    }
+    $('.ohh').keyup(function(){collect()});
+
+    $('input#code').keyup(function(){
+        
+      var code= $('input[name="code"]').val();
+      if(code.length>=13){
+        $('input[name="code"]').select();
+  			$.getJSON('/tackBCR', {
+  				 brcode: $('input[name="code"]').val(),
+  			}, function(data) {
+          if(data.result.length){
+            var rs=true;
+            $(".ohh tr.service").each(function() {
+              var cells = $('td>p', this);
+              
+              if(cells.eq(1).text()==data.result[1]){
+                cells.eq(2).text(parseFloat(cells.eq(2).text())+1);
+                rs=false;
+              }
+            });
+            if(rs==true){
+              $('.billNo').text(data.result[3]);
+              var totalrow=$('tr[name="total"]');
+              totalrow.detach();
+              $('table[name="sellData"]').append("<tr class=service><td class=tableitem style='cursor: pointer'><p class=itemtext>"+data.result[0]+"</p></td><td class=tableitem hidden=True><p class=itemtext>"+data.result[1]+"</p></td><td class=tableitem contenteditable='true'><p class=itemtext>1</p></td><td class=tableitem contenteditable='true'><p class=itemtext>"+data.result[2]+"</p</td><td><p class=subtotal>345</p></td></tr>");
+              $('table[name="sellData"]').append(totalrow);
+            }
+            collect()
+          }
+  			});
+      };
+    });
+
+  collect();
+    $('input[name="send"]').click(function(){
+      collect();
+      $.ajax({
+        url: "/store",
+        type: "POST",
+        data: JSON.stringify(arr),
+        contentType: "application/json; charset=utf-8",
+        success: function(dat) {
+          $('p#result').text(dat);
+          var head=$('.ohh tr').first();
+          var foot=$('.ohh tr').last();
+          foot.children().children('.payment>h2').text('0');
+          $('.ohh').empty();
+          $('.ohh').append(head);
+          $('.ohh').append(foot);
+        }
+      });
+    });
+
+    $('.ohh').on('click', 'tr.service>td:first-child>p', function(){
+      $(this).closest('tr').remove();
+      collect();
+    });
+
+  });
+  </script>
+{% endblock %}

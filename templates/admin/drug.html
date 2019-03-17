@@ -1,0 +1,382 @@
+
+  {% extends "admin/master.html" %}
+  {% import "bootstrap/wtf.html" as wtf %}
+
+
+  {% block head %}
+  <link rel="stylesheet" href="{{ url_for('static',filename='vendor/datatables-plugins/dataTables.bootstrap.css') }}">
+
+    <!-- DataTables Responsive CSS -->
+    <!-- <link href="static/vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet"> -->
+  <link rel="stylesheet" href="{{ url_for('static' ,filename='vendor/datatables-responsive/dataTables.responsive.css') }}">
+<style>
+
+#img{
+    width:5cm;
+    height:2.5cm;
+}
+
+#left{
+    float:left;
+}
+#right{
+    float:right;
+}
+
+</style>
+{% endblock %}
+
+  {% block content %}
+
+<div class="row">
+  <div class="col-lg-12">
+      <h1 class="page-header">دوا</h1>
+  </div>
+
+  <!-- /.col-lg-12 -->
+</div>
+
+<div class = "container-fluid">
+<div class="col-lg-12 col-sm-12">
+
+  <div class="btn-pref btn-group btn-group-justified btn-group-lg" role="group" aria-label="...">
+      <div class="btn-group" role="group">
+          <button type="button" id="favorites" class="btn btn-default" href="#tab3" data-toggle="tab"><span class="fa fa-plus-square" aria-hidden="true"></span>
+              <div class="hidden-xs">د دواوو لیست</div>
+          </button>
+      </div>
+      <div class="btn-group" role="group">
+          <button type="button" id="following" class="btn btn-default" href="#tab1" data-toggle="tab"><span class="fa fa-list" aria-hidden="true"></span>
+              <div class="hidden-xs">دوا ثبتول</div>
+          </button>
+      </div>
+  </div>
+
+      <div class="well">
+    <div class="tab-content">
+
+      <div class="tab-pane  fade in"  id="tab1">
+
+
+          <div class="panel panel-default">
+              <div class="panel-heading ">
+                  <h4> د دوا معلومات داخل کړی</h4>
+              </div>
+              <!-- /.panel-heading -->
+              <div class="panel-body text-right">
+                <form action="{% if not rout == '0' %}{{ url_for('storeDrug', modification = 'y', drugId = rout) }}{% else %} {{ url_for('storeDrug', modification = 'n', drugId= 'None') }} {% endif %}" method='POST'>
+                 
+                    {{form.hidden_tag()}}
+
+                    {{wtf.form_field(form.dname)}}
+                    {{wtf.form_field(form.type)}}
+                    {{wtf.form_field(form.Category)}}
+                    {{wtf.form_field(form.company)}}
+                    {{wtf.form_field(form.barcode)}}
+                  <button type="submit" class = "btn bg-green" id = "drugRegistraion" >ثبتول</button>
+              </form>
+              </div>
+              <!-- /.panel-body -->
+          </div>
+
+
+      </div>
+      <div class="tab-pane fade in" id="tab3">
+        <div class="row">
+          <div class="col-lg-12">
+              <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <div class="input-group ">
+                            <!-- <form action="{{ url_for('drugFilter') }}" class="form form-inline" >
+                                    <div class="form-group">
+                                            <select type="text" class="form-control type" placeholder="Drug types..." name="type" style="width:200px">
+                                                <option value=""></option>
+                                            </select>
+
+                                        </div>
+
+                                        <div class="form-group">
+                                                <select type="text" class="form-control" placeholder="Drug Categories..." name="category" style="width:200px" >
+                                                    <option value=""></option>
+                                                </select>
+                                            </div>
+
+                                    <div class="form-group">
+                                            <input type="submit" class="btn btn-default"  class="form-control" value=" پلټنه " name="send">
+                                        </div>
+
+                          </form> -->
+
+                        <!-- safh -->
+                    <!-- <form action="{{ url_for('drugFilter') }}">
+                        <div class="form-group">
+
+                            <input type="text" class="form-control" placeholder="Drug types..." name="type">
+
+                        </div>
+                        <div class="form-group">
+
+                            <input type="text" class="form-control" placeholder="Drug Categories..." name="category">
+                        </div>
+                        <!-- <span class="input-group-btn">
+                        <button class="btn btn-defaul    var type = '';
+t" type="button">
+                            <i class="fa fa-search"><input required type="submit"></i>
+                        </button>
+                    </span> -->
+                    <!-- </form> -->
+
+                </div>
+                  </div>
+                  <!-- /.panel-heading -->
+                  <div class="panel-body">
+                      <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example" style="direction:rtl">
+                        <thead>
+                            <tr>
+                                <th hidden = true >ای ډی</th>
+                                <th>نوم</th>
+                                <th>ډول</th>
+                                <th>کيټه ګوری</th>
+                                <th>کمپنی</th>
+                                <th>بارکوډ</th>
+                                <th>تغیرات</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for dataItem in dataList %}
+                            <tr>
+                                <td hidden = true >{{dataItem.drugId}}</td>
+                                <td>{{dataItem.drugName}}</td>
+                                <td>{{dataItem.drugType}}</td>
+                                <td>{{dataItem.categoryName}}</td>
+                                <td>{{dataItem.companyName}}</td>
+                                <td>{{dataItem.barcode }}</td>
+                                <td>
+                                    <a href="{{ url_for('drug', drugId=dataItem.drugId) }}"><button class= "update btn btn-warning btn-sm"><i class ="fa fa-edit"></i> </button></a>
+                                    <a href="{{ url_for('removeDrug', drugId=dataItem.drugId) }}"><button class= "update btn btn-danger btn-sm"><i class ="fa fa-trash fa-large"></i> </button></a>
+                                    <button class= "update btn btn-primary btn-sm"  name='print'><i class ="fa fa-print fa-large"></i> </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+
+                      </table>
+                      <!-- /.table-responsive -->
+
+                  </div>
+                  <!-- /.panel-body -->
+              </div>
+              <!-- /.panel -->
+          </div>
+          <!-- /.col-lg-12 -->
+      </div>
+      </div>
+    </div>
+  </div>
+
+  </div>
+</div>
+<div style='display:none'>
+<div id='left' class='row'></div>
+<br><br>
+<h1>dsafsdafsadf</h1>
+<div id='right' class='row'></div>
+</div>
+{% endblock %}
+
+{% block head_js %}
+<!-- <script src="../vendor/datatables/js/jquery.dataTables.min.js"></script> -->
+<script src="{{ url_for('static',filename='vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
+
+<!-- <script src="../vendor/datatables-plugins/dataTables.bootstrap.min.js"></script> -->
+<script src="{{ url_for('static',filename='vendor/datatables-plugins/dataTables.bootstrap.min.js') }}"></script>
+
+<!-- <script src="../vendor/datatables-responsive/dataTables.responsive.js"></script> -->
+<script src="{{ url_for('static',filename='vendor/datatables-responsive/dataTables.responsive.js') }}"></script>
+{% block print %}
+    <script src="{{ url_for('static',    filename='vendor/jquery/printThis.js') }}"></script>
+{% endblock %}
+
+
+
+<script>
+
+    var type = '';
+$('select[name = type]').css('width', '100%');
+
+
+
+
+$('select[name = Category]').css('width', '100%');
+$('select[name = company]').css('width', '100%');
+
+
+$('select[name = type]').select2({
+    
+    placeholder:' د دوا کټګوری انتخاب کړی'
+});
+$('select[name = Category]').select2({
+    placeholder:' د دوا کټګوری انتخاب کړی',
+    allowClear :true
+});
+
+$('select[name = company]').select2({
+    placeholder:' د دوا کمپنی انتخاب کړی'
+});
+        
+$('select').select2().on('select2:open', function(e) {
+  // set a global reference for the current selected Select
+  if(e.target.name == 'type'){
+        type = 'type';
+        console.log(type);
+  }
+  else if(e.target.name == 'Category'){
+
+        type = 'Category';
+        console.log(type);
+      }
+  else if(e.target.name == 'company'){
+        type = 'Company';
+        console.log(type);
+  }
+    
+  if (typeof tempSelectedObj === 'undefined') {
+    tempSelectedObj = null;
+  }
+  tempSelectedObj = this;
+});
+
+$(document).on('keyup', 'input.select2-search__field', function(e) {
+    if (e.keyCode === 13) {
+
+    var newValue = $(this).val();
+    data = {
+        newValue: newValue,
+        type:type
+    }
+    
+    data = JSON.stringify(data);
+    $.ajax({
+        url:'/dynamicStore',
+        type: 'POST',
+        data:data,
+        contentType: 'application/json; charset = UTF-8',
+        cache:false,
+        success: function(response){
+            
+            console.log(response);
+             
+            text = response.name;
+            value = response.id;
+            var newOpt = $('<option>')
+      .val(value)
+      .text(text)
+
+    // append to the current Select
+    if(type == 'type'){
+    $(tempSelectedObj)
+      .append(newOpt);
+      a = value.toString()
+      $('select[name = type]').val(a).trigger('change').select2().trigger('select2:close');
+    }
+
+    else if(type == 'Category'){
+    $(tempSelectedObj)
+      .append(newOpt);
+      a = value.toString()
+      $('select[name = Category]').val(a).trigger('change').select2().trigger('select2:close');
+    }
+
+    else if(type == 'Company'){
+    $(tempSelectedObj)
+      .append(newOpt);
+      a = value.toString()
+      $('select[name = company]').val(a).trigger('change').select2().trigger('select2:close');
+    }
+    
+    
+
+        },
+        error:function(response){
+            console.log("Error")
+        }
+
+        });
+    }
+});
+
+
+function printBCR(){
+    //alert('print');
+    $("img#img").printThis({
+    debug: false,               // show the iframe for debugging
+    importCSS: true,            // import parent page css
+    importStyle: true,         // import style tags
+    printContainer: true,       // print outer container/$.selector
+    loadCSS: "",                // path to additional css file - use an array [] for multiple
+    pageTitle: "",              // add title to print page
+    removeInline: false,        // remove inline styles from print elements
+    removeInlineSelector: "*",  // custom selectors to filter inline styles. removeInline must be true
+    printDelay: 333,            // variable print delay
+    header: null,               // prefix to html
+    footer: null,               // postfix to html
+    base: false,                // preserve the BASE tag or accept a string for the URL
+    formValues: true,           // preserve input/form values
+    canvas: false,              // copy canvas content       // enter a different doctype for older markup
+    removeScripts: false,       // remove script tags from print content
+    copyTagClasses: false,      // copy classes from the html & body tag
+    beforePrintEvent: null,     // function for printEvent in iframe
+    beforePrint: null,          // function called before iframe is filled
+    afterPrint: null              // variable print delay
+    });
+  }
+
+$('button[data-toggle="tab"]').on('show.bs.tab', function(e) {
+    localStorage.setItem('activeTab', $(e.target).attr('href'));
+});
+
+// Acá guarda el index al cual corresponde la tab. Lo podés ver en el dev tool de chrome.
+var activeTab = localStorage.getItem('activeTab');
+
+// En la consola te va a mostrar la pestaña donde hiciste el último click y lo
+// guarda en "activeTab". Te dejo el console para que lo veas. Y cuando refresques
+// el browser, va a quedar activa la última donde hiciste el click.
+console.log(activeTab);
+
+if (activeTab) {
+   $('button[href="' + activeTab + '"]').tab('show');
+}
+    $(document).ready(function() {
+        $('#dataTables-example').DataTable({
+            responsive: true
+        });
+    });
+
+$("button[name='print']").click(function(){
+    //alert('s')
+    var val=$(this).closest('tr').find('td:first-child').text();
+    $.ajax({
+        url: "/generateBCR",
+        type: "POST",
+        data: JSON.stringify(val),
+        contentType: "application/json; charset=utf-8",
+        success: function(dat) {
+            $('div#left').empty();
+            $('div#right').empty();
+            $('div#left').append("<img class='pull-left' srcset='{{url_for('static', filename='drug.svg')}}' id='img'>".replace("drug", dat.result));
+            $('div#left').append("<img class='pull-left' srcset='{{url_for('static', filename='drug.svg')}}' id='img'>".replace("drug", dat.result));
+            $('div#left').append("<img class='pull-left' srcset='{{url_for('static', filename='drug.svg')}}' id='img'>".replace("drug", dat.result));
+            $('div#left').append("<img class='pull-left' srcset='{{url_for('static', filename='drug.svg')}}' id='img' style='margin-bottom:0.6cm;'>".replace("drug", dat.result));
+            $('div#right').append("<img class='' srcset='{{url_for('static', filename='drug.svg')}}' id='img' style='margin-bottom:0cm;'>".replace("drug", dat.result));
+            $('div#right').append("<img class='' srcset='{{url_for('static', filename='drug.svg')}}' id='img'>".replace("drug", dat.result));
+            $('div#right').append("<img class='' srcset='{{url_for('static', filename='drug.svg')}}' id='img'>".replace("drug", dat.result));
+            $('div#right').append("<img class='' srcset='{{url_for('static', filename='drug.svg')}}' id='img'>".replace("drug", dat.result));
+
+            printBCR();
+
+        }
+    });
+});
+</script>
+{% endblock %}

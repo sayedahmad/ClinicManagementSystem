@@ -1,0 +1,130 @@
+{% extends "admin/master.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+
+{% block head %}
+<link rel="stylesheet" href="{{
+    url_for('static',filename='vendor/datatables-plugins/dataTables.bootstrap.css')
+    }}">
+
+<!-- DataTables Responsive CSS -->
+<!-- <link href="static/vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet"> -->
+<link rel="stylesheet" href="{{ url_for('static'
+    ,filename='vendor/datatables-responsive/dataTables.responsive.css') }}">
+
+{% endblock %}
+
+
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+
+        <h1 class="page-header"> </h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+<div class="container-fluid">
+    <div class="col-lg-12 col-sm-12">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <form action="{{ url_for('employeeByJob', report='y')
+                            }}" class="form form-inline">
+                            <div class="form-group">
+                               
+                                {{wtf.form_field(form.job)}}
+
+                                <div class="form-group">
+                                        <input type="submit" value="پلټنه" class="form-control" >
+                                </div>
+
+                            </div>
+                        </form>
+
+
+
+
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+
+                        <table width="100%" class="table table-striped
+                            table-bordered table-hover" id="dataTables-example">
+                            <thead>
+                                <tr>
+                                    <th hidden = true >ID</th>
+                                    <th>نوم</th>
+                                    <th>شمیره</th>
+                                    <th>وظیفه</th>
+                                    <th>ادرس</th>
+                                    <th> د تذکیری نمبر</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for data in dataList %}
+                                <tr>
+                                    <td hidden=true>{{data['employeeId']}}</td>
+                                    <td>{{data['employeeName'].decode('utf-8')}}</td>
+                                    <td>{{data['phoneNumber']}}</td>
+                                    <td>{% if not data['employeeJob']==None %}{{data['employeeJob'].decode('utf-8')}}{% else %}{{data['employeeJob']}}{% endif %}</td>
+                                    <td>{{data['homeAddress'].decode('utf-8')}}</td>
+                                    <td>{{data['NIC_No']}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+    {% endblock %}
+
+
+
+    {% block head_js %}
+    <!-- <script src="../vendor/datatables/js/jquery.dataTables.min.js"></script> -->
+    <script src="{{
+        url_for('static',filename='vendor/datatables/js/jquery.dataTables.min.js')
+        }}"></script>
+
+    <!-- <script src="../vendor/datatables-plugins/dataTables.bootstrap.min.js"></script> -->
+    <script src="{{
+        url_for('static',filename='vendor/datatables-plugins/dataTables.bootstrap.min.js')
+        }}"></script>
+
+    <!-- <script src="../vendor/datatables-responsive/dataTables.responsive.js"></script> -->
+    <script src="{{
+        url_for('static',filename='vendor/datatables-responsive/dataTables.responsive.js')
+        }}"></script>
+
+    <script>
+
+
+$('select[name = job]').css('width', '200px');
+$('select[name = job]').select2();
+
+
+    $(document).ready(function() {
+            $('#dataTables-example').DataTable({
+                responsive: true
+            });
+            $('#dataTables-exampl').DataTable({
+                responsive: true
+            });
+
+
+
+        });
+    </script>
+    {% endblock %}
+
+    <!---->

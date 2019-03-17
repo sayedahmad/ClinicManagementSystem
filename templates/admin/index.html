@@ -1,0 +1,200 @@
+
+    {% extends "admin/master.html" %}
+
+
+    {% block head %}
+    <style>
+
+    h4{
+      text-align: right;
+    }
+
+    </style>
+    {% endblock %}
+
+    {% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">عمومی صفحه</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+<!-- /.row -->
+<div class="container-fluid">
+    <div class="row">
+    <div class="col-md-3 col-sm-4">
+    <div class="wrimagecard wrimagecard-topimage">
+          <a href="{{url_for('drug',drugId = 'None')}}">
+          <div class="wrimagecard-topimage_header" style="background-color:rgba(187, 120, 36, 0.1) ">
+            <center><i class="fa fa-medkit" style="color:#BB7824"></i></center>
+          </div>
+          <div class="wrimagecard-topimage_title">
+            <h4>دواه</h4>
+
+          </div>
+        </a>
+      </div>
+      </div>
+    <div class="col-md-3 col-sm-4">
+      <div class="wrimagecard wrimagecard-topimage">
+          <a href="{{url_for('patient', report = 'n')}}">
+          <div class="wrimagecard-topimage_header" style="background-color: rgba(22, 160, 133, 0.1)">
+            <center><i class = "fa fa-bed" style="color:#16A085"></i></center>
+          </div>
+          <div class="wrimagecard-topimage_title">
+            <h4>مریض
+            <div class="pull-right badge" id="WrControls"></div></h4>
+          </div>
+        </a>
+      </div>
+</div>
+<div class="col-md-3 col-sm-4">
+      <div class="wrimagecard wrimagecard-topimage">
+          <a href="{{url_for('sale')}}">
+          <div class="wrimagecard-topimage_header" style="background-color:  rgba(213, 15, 37, 0.1)">
+            <center><i class="fa fa-shopping-cart" style="color:#d50f25"> </i></center>
+          </div>
+          <div class="wrimagecard-topimage_title" >
+            <h4>خرڅلاو
+            <div class="pull-right badge" id="WrForms"></div>
+            </h4>
+          </div>
+
+        </a>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-4">
+      <div class="wrimagecard wrimagecard-topimage">
+          <a href="{{url_for('purchaseReport')}}">
+          <div class="wrimagecard-topimage_header" style="background-color:  rgba(51, 105, 232, 0.1)">
+             <center><i class="fa fa-shopping-cart " style="color:#3369e8"> </i></center>
+          </div>
+          <div class="wrimagecard-topimage_title">
+            <h4>رانیول
+            <div class="pull-right badge" id="WrGridSystem"></div></h4>
+          </div>
+
+        </a>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-4">
+      <div class="wrimagecard wrimagecard-topimage">
+          <a href="{{url_for('doctor', doctorId = 'None')}}">
+          <div class="wrimagecard-topimage_header" style="background-color:  rgba(250, 188, 9, 0.1)">
+             <center><i class="fa fa-user-md" style="color:#fabc09"> </i></center>
+          </div>
+          <div class="wrimagecard-topimage_title">
+            <h4>ډاکټر
+            <div class="pull-right badge" id="WrInformation"></div></h4>
+          </div>
+
+        </a>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-4">
+      <div class="wrimagecard wrimagecard-topimage">
+          <a href="{{url_for('user')}}">
+            <div class="wrimagecard-topimage_header" style="background-color: rgba(121, 90, 71, 0.1)">
+           <center><i class="fa fa-users" style="color:#795a47"> </i></center>
+          </div>
+          <div class="wrimagecard-topimage_title">
+            <h4>کارونکي
+            <div class="pull-right badge" id="WrNavigation"></div></h4>
+          </div>
+
+        </a>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-4">
+      <div class="wrimagecard wrimagecard-topimage">
+          <a href="{{url_for('employee',salaryId = 'None', employeeId = 'None')}}">
+         <div class="wrimagecard-topimage_header" style="background-color: rgba(130, 93, 9, 0.1)">
+            <center><i class="fa fa-user" style="color:#825d09"></i></center>
+          </div>
+          <div class="wrimagecard-topimage_title">
+            <h4>کارمندان
+            <div class="pull-right badge" id="WrThemesIcons"></div></h4>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-4">
+        <div class="wrimagecard wrimagecard-topimage">
+              <a href="{{url_for('sickness')}}">
+              <div class="wrimagecard-topimage_header" style="background-color:rgba(187, 120, 36, 0.1) ">
+                <center><i class="fa fa-ambulance" style="color:#BB7824"></i></center>
+              </div>
+              <div class="wrimagecard-topimage_title">
+                <h4>امراض
+
+              </div>
+            </a>
+          </div>
+          </div>
+</div>
+
+
+
+
+    <div class="row">
+    <div class="col-md-3 col-sm-4">
+    <div class="wrimagecard wrimagecard-topimage">
+          <a href="{{url_for('visit')}}">
+          <div class="wrimagecard-topimage_header" style="background-color:rgba(187, 120, 36, 0.1) ">
+            <center><i class="fa fa-stethoscope" style="color:#BB7824"></i></center>
+          </div>
+          <div class="wrimagecard-topimage_title">
+            <h4>لیدنه
+
+          </div>
+        </a>
+      </div>
+      </div>
+    <div class="col-md-3 col-sm-4">
+      <div class="wrimagecard wrimagecard-topimage">
+          <a href="{{url_for('pharmicyreport', filter='n')}}">
+          <div class="wrimagecard-topimage_header" style="background-color: rgba(22, 160, 133, 0.1)">
+            <center><i class = "fa fa-cubes" style="color:#16A085"></i></center>
+          </div>
+          <div class="wrimagecard-topimage_title">
+            <h4>درملتون راپور
+            <div class="pull-right badge" id="WrControls"></div></h4>
+          </div>
+        </a>
+      </div>
+</div>
+<div class="col-md-3 col-sm-4">
+      <div class="wrimagecard wrimagecard-topimage">
+          <a href="{{url_for('clinicReport')}}">
+          <div class="wrimagecard-topimage_header" style="background-color:  rgba(213, 15, 37, 0.1)">
+            <center><i class="fa fa-pencil-square-o" style="color:#d50f25"> </i></center>
+          </div>
+          <div class="wrimagecard-topimage_title" >
+            <h4>کلینک راپور
+            <div class="pull-right badge" id="WrForms"></div>
+            </h4>
+          </div>
+
+        </a>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-4">
+      <div class="wrimagecard wrimagecard-topimage">
+          <a href="{{url_for('labTest')}}">
+          <div class="wrimagecard-topimage_header" style="background-color:  rgba(51, 105, 232, 0.1)">
+             <center><i class="fa fa-plus-square" style="color:#3369e8"> </i></center>
+          </div>
+          <div class="wrimagecard-topimage_title">
+            <h4>لابراتوار
+            <div class="pull-right badge" id="WrGridSystem"></div></h4>
+          </div>
+
+        </a>
+      </div>
+    </div>
+</div>
+
+
+    </div>
+{% endblock %}

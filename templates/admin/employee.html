@@ -1,0 +1,506 @@
+{% extends "admin/master.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static',filename='vendor/datatables-plugins/dataTables.bootstrap.css') }}">
+
+    <!-- DataTables Responsive CSS -->
+    <!-- <link href="static/vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet"> -->
+  <link rel="stylesheet" href="{{ url_for('static' ,filename='vendor/datatables-responsive/dataTables.responsive.css') }}">
+
+{% endblock %}
+
+
+
+  {% block content %}
+<div class="row">
+  <div class="col-lg-12">
+
+      <h1 class="page-header"></h1>
+  </div>
+  <!-- /.col-lg-12 -->
+</div>
+
+<div class = "container-fluid">
+<div class="col-lg-12 col-sm-12">
+
+  <div class="btn-pref btn-group btn-group-justified btn-group-lg" role="group" aria-label="...">
+
+      <div class="btn-group" role="group">
+          <button type="button" id="favorites" class="btn btn-default" href="#tab1" data-toggle="tab"><span class="fa fa-plus-square" aria-hidden="true"></span>
+              <div class="hidden-xs"> د کاریګر اظافه کول </div>
+          </button>
+      </div>
+      <div class="btn-group" role="group">
+          <a href="url_for('showSalary')">
+        <button type="button" id="em" class="btn btn-default" href="#tab2" data-toggle="tab"><span class="fa fa-money" aria-hidden="true"></span>
+            <div class="hidden-xs">معاش</div>
+        </button>
+    </a>
+    </div>
+    <div class="btn-group" role="group">
+        <a href="url_for('showSalary')">
+      <button type="button" id="em" class="btn btn-default" href="#tab3" data-toggle="tab"><span class="fa fa-money" aria-hidden="true"></span>
+          <div class="hidden-xs"> د ډاکټر فیس </div>
+      </button>
+  </a>
+  </div>
+  <div class="btn-group" role="group">
+    <a href="url_for('showSalary')">
+  <button type="button" id="em" class="btn btn-default" href="#tab4" data-toggle="tab"><span class="fa fa-money" aria-hidden="true"></span>
+      <div class="hidden-xs"> د معایناتو فیس </div>
+  </button>
+</a>
+</div>
+      <div class="btn-group" role="group">
+          <button type="button" id="empSalaries" class="btn btn-default" href="#tab5" data-toggle="tab"><span class="fa fa-list" aria-hidden="true"></span>
+              <div class="hidden-xs"> د معاشاتو لیست </div>
+          </button>
+      </div>
+      <div class="btn-group" role="group">
+        <button type="button" id="following" class="btn btn-default" href="#tab6" data-toggle="tab"><span class="fa fa-users" aria-hidden="true"></span>
+            <div class="hidden-xs"> د کاریګرو لیست </div>
+        </button>
+    </div>
+  </div>
+
+      <div class="well">
+    <div class="tab-content">
+
+      <div class="tab-pane fade in"  id="tab1">
+
+
+          <div class="panel panel-default">
+              <div class="panel-heading ">
+              </div>
+              <!-- /.panel-heading -->
+              <div class="panel-body">
+                <form action="{% if not employeeId == '0' %}{{ url_for('storeEmployee', modification = 'y', employeeId = employeeId) }}{% else %} {{ url_for('storeEmployee', modification = 'n', employeeId= 'None') }} {% endif %}" method='POST'>
+
+                    {{wtf.form_field(employeeForm.name)}}
+                    {{wtf.form_field(employeeForm.phone)}}
+                    {{wtf.form_field(employeeForm.job)}}
+                    {{wtf.form_field(employeeForm.address)}}
+                    {{wtf.form_field(employeeForm.nic_no)}}
+                    {{wtf.form_field(employeeForm.email)}}
+
+
+
+
+
+
+                    <button type="submit" class = "btn bg-green text-white" name = "employee-Registration" >ثبتول</button>
+                </form>
+              </div>
+              <!-- /.panel-body -->
+          </div>
+
+
+      </div>
+      <div class="tab-pane fade in"  id="tab2">
+
+
+        <div class="panel panel-default">
+            <div class="panel-heading ">
+                <h4> معاش اظافه کول </h4>
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <form action="{% if not salaryId == '0' %}{{ url_for('storeSalary', modification = 'y', salaryId = salaryId) }}{% else %} {{ url_for('storeSalary', modification = 'n', salaryId= 'None') }} {% endif %}" method='POST'>
+                    {{wtf.form_field(salaryForm.empNames)}}
+                    {{wtf.form_field(salaryForm.month)}}
+                    {{wtf.form_field(salaryForm.amount)}}
+                    {{wtf.form_field(salaryForm.status)}}
+
+
+
+
+
+                    <button type="submit" class = "btn bg-green text-white" id = "employeeRegistration" >ثبتول</button>
+                </form>
+            </div>
+            <!-- /.panel-body -->
+        </div>
+
+
+    </div>
+
+    <div class="tab-pane fade in" id="tab3">
+        <div class="row">
+            <div class="col-md-6">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <div class="row">
+                                        <div class="col-xs-6 pull-right">
+                                            <h2> ‌‌‌ د ډاکټر فیس </h2>
+                                        </div>
+                                        <div class="col-xs-6 text-right">
+                                            <h1><i class="fa fa-dollar-sign" aria-hidden="true"></i> <span
+                                               class="pull-left" ></span> {{sumd}} </span></h1>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a href="#">
+                                        <div class="panel-footer">
+                                            <span class="pull-right">‌‌‌ د ډاکټر ورځنی ټوټل</span>
+                                            <span class="pull-left"><i class="fa fa-arrow-circle-right"></i></span>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    </a>
+                            </div><!-- <script src="../vendor/datatables/js/jquery.dataTables.min.js"></script> -->
+
+
+                        </div>
+
+        </div>
+        <div class="row">
+          <div class="col-lg-12">
+              <div class="panel panel-default">
+                  <div class="panel-heading">
+                  </div>
+                  <!-- /.panel-heading -->
+                  <div class="panel-body">
+                      <table width="100%" class="table table-striped table-bordered table-hover" id="doctorFee">
+                        <thead>
+                            <tr>
+                                    <th hidden = true >ID</th>
+                                    <th>ډا کټر</th>
+                                    <th>فیس</th>
+                                    <th>مریضان</th>
+                                    <th>ټوټل</th>
+                            </tr>
+                        </thead>
+                        <tbody >
+
+                                {% for d in dlist %}
+                                <tr>
+                                <td hidden = true >{{ d.visitId }}</td>
+                                <td>{{ d.employeeName.decode('utf-8') }}</td>
+                                <td>{{ d.fee }}</td>
+                                <td>{{ d.pCount }}</td>
+                                <td>{{ d.pCount*d.fee }}</td>
+                                </tr>
+                                {% endfor %}
+
+                        </tbody>
+                      </table>
+                      <!-- /.table-responsive
+
+                  </div>
+                  /.panel-body -->
+              </div>
+              <!-- /.panel -->
+          </div>
+          <!-- /.col-lg-12 -->
+      </div>
+      </div>
+    </div>
+    <div class="tab-pane fade in" id="tab4">
+            <div class="row">
+                <div class="col-md-6">
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-xs-6 pull-right">
+                                                <h2> د معایناتو فیس </h2>
+                                            </div>
+                                            <div class="col-xs-6 text-right">
+                                                <h1><i class="fa fa-dollar-sign" aria-hidden="true"></i> <span
+                                                   class="pull-left" ></span> {{ sumt }} </span></h1>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <a href="#">
+                                            <div class="panel-footer">
+                                                <span class="pull-right"> د معایناتو ورځنی ټول </span>
+                                                <span class="pull-left"><i class="fa fa-arrow-circle-right"></i></span>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </a>
+                                </div>
+
+                            </div>
+
+            </div>
+            <div class="row">
+              <div class="col-lg-12">
+                  <div class="panel panel-default">
+                      <div class="panel-heading">
+                      </div>
+                      <!-- /.panel-heading -->
+                      <div class="panel-body">
+                          <table width="100%" class="table table-striped table-bordered table-hover" id="testFee">
+                            <thead>
+                                <tr>
+                                        <th hidden = true >ID</th>
+                                        <th>معاینات</th>
+                                        <th>فیس</th>
+                                        <th>مریضان</th>
+                                        <th>ټوټل</th>
+                                </tr>
+                                </thead>
+                            <tbody >
+
+                         {% for d in tlist %}
+                                <tr>
+                                <td hidden = true >{{ d.testId }}</td>
+                                <td>{{ d.Name }}</td>
+                                <td>{{ d.Amount }}</td>
+                                <td>{{ d.pCount }}</td>
+                                <td>{{ d.pCount*d.Amount }}</td>
+                                </tr>
+                         {% endfor %}
+
+                            </tbody>
+                          </table>
+                          <!-- /.table-responsive
+
+                      </div>
+                      /.panel-body -->
+                  </div>
+                  <!-- /.panel -->
+              </div>
+              <!-- /.col-lg-12 -->
+          </div>
+          </div>
+        </div>
+
+
+    <div class="tab-pane fade in" id="tab5">
+            <div class="row">
+              <div class="col-lg-12">
+                  <div class="panel panel-default">
+                      <div class="panel-heading">
+                      </div>
+                      <!-- /.panel-heading -->
+                      <div class="panel-body">
+                          <table width="100%" class="table table-striped table-bordered table-hover" id="salary-dataTable">
+                            <thead>
+                                <tr>
+                                    <th> د کاریګر نوم </th>
+                                    <th>میاشت</th>
+                                    <th>حالت</th>
+                                    <th>اداینه</th>
+                                    <th>تغیرول</th>
+                                </tr>
+                            </thead>
+                            <tbody >
+
+                                {% for data in salaryData %}
+                                <tr>
+                                    <td>{{data['employeeName'].decode('utf-8')}}</td>
+                                    <td>{{data['amount']}}</td>
+                                    <td>{{data['month']}}</td>
+                                    <td>{{data['status']}}</td>
+
+                                    <td>
+                                        <a href="{{ url_for('removeEmp', empId=data.employeeId) }}"><button class= "update btn btn-danger btn-sm"><i class ="fa fa-trash fa-large"></i> </button></a>
+                                        <a class="salaryActiveTab" href="{{ url_for('employee', employeeId='None', salaryId = data.salaryId) }}"><button class= "update btn btn-warning btn-sm"><i class ="fa fa-edit fa-large"></i> </button></a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+
+                            </tbody>
+                          </table>
+                          <!-- /.table-responsive
+
+                      </div>
+                      /.panel-body -->
+                  </div>
+                  <!-- /.panel -->
+              </div>
+              <!-- /.col-lg-12 -->
+          </div>
+          </div>
+        </div>
+
+      <div class="tab-pane fade in" id="tab6">
+        <div class="row">
+          <div class="col-lg-12">
+              <div class="panel panel-default">
+                  <div class="panel-heading">
+
+                  </div>
+                  <!-- /.panel-heading -->
+                  <div class="panel-body">
+
+                      <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
+                        <thead>
+                            <tr>
+                                <th hidden = true >ID</th>
+                                <th>نوم</th>
+                                <th>شمیره</th>
+                                <th>ادرس</th>
+                                <th>دنده</th>
+                                <th> د تذکیری شمیره </th>
+                                <th>تغیرول</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for data in dataList %}
+                            <tr>
+                                <td hidden = true >{{data['employeeId']}}</td>
+                                <td>{{data['employeeName'].decode('utf-8')}}</td>
+                                <td>{{data['phoneNumber']}}</td>
+                                <td>{{data['homeAddress'].decode('utf-8')}}</td>
+                                <td>{% if not data['employeeJob']==None %}{{data['employeeJob'].decode('utf-8')}}{% else %}{{data['employeeJob']}}{% endif %}</td>
+                                <td>{{data['NIC_No']}}</td>
+                                <td>
+                                    <a href="{{ url_for('removeEmp', empId=data.employeeId) }}"><button class= "update btn btn-danger btn-sm"><i class ="fa fa-trash fa-large"></i> </button></a>
+                                    <a href="{{ url_for('employee', employeeId=data.employeeId, salaryId = 'None') }}"><button class= "update btn btn-warning btn-sm"><i class ="fa fa-edit fa-large"></i> </button></a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                      </table> -->
+                      <!-- /.table-responsive
+
+                  </div>
+                  <!-- /.panel-body -->
+              </div>
+              <!-- /.panel -->
+          </div>
+          <!-- /.col-lg-12 -->
+      </div>
+      </div>
+    </div>
+  </div>
+
+  </div>
+</div>
+
+
+{% endblock %}
+
+
+
+{% block head_js %}
+<!-- <script src="../vendor/datatables/js/jquery.dataTables.min.js"></script> -->
+<script src="{{ url_for('static',filename='vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
+
+<!-- <script src="../vendor/datatables-plugins/dataTables.bootstrap.min.js"></script> -->
+<script src="{{ url_for('static',filename='vendor/datatables-plugins/dataTables.bootstrap.min.js') }}"></script>
+
+<!-- <script src="../vendor/datatables-responsive/dataTables.responsive.js"></script> -->
+<script src="{{ url_for('static',filename='vendor/datatables-responsive/dataTables.responsive.js') }}"></script>
+
+<script>
+
+
+
+
+var type = '';
+
+
+$('select').css('width', '100%');
+
+
+$('select[name = job]').select2();
+$('select[name = empNames]').select2();
+
+
+$('select[name = job]').select2().on('select2:open', function(e) {
+  // set a global reference for the current selected Select
+  if(e.target.name == 'job'){
+        type = 'job';
+  }
+
+
+
+  if (typeof tempSelectedObj === 'undefined') {
+    tempSelectedObj = null;
+  }
+  tempSelectedObj = this;
+});
+
+$(document).on('keyup', 'input.select2-search__field', function(e) {
+    if (e.keyCode === 13) {
+
+    var newValue = $(this).val();
+    data = {
+        newValue: newValue,
+        type:type
+    }
+
+    data = JSON.stringify(data);
+    $.ajax({
+        url:'/dynamicStore',
+        type: 'POST',
+        data:data,
+        contentType: 'application/json; charset = UTF-8',
+        cache:false,
+        success: function(response){
+
+            console.log(response);
+
+            text = response.name;
+            value = response.id;
+            var newOpt = $('<option>')
+      .val(value)
+      .text(text)
+
+    // append to the current Select
+
+    $(tempSelectedObj)
+      .append(newOpt);
+      a = value.toString()
+      $('select[name = job]').val(a).trigger('change').select2().trigger('select2:close');
+
+
+
+
+
+
+
+
+        },
+        error:function(response){
+            console.log("Error")
+        }
+
+        });
+    }
+});
+
+
+$('button[data-toggle="tab"]').on('show.bs.tab', function(e) {
+
+    localStorage.setItem('activeTab', $(e.target).attr('href'));
+});
+
+// Acá guarda el index al cual corresponde la tab. Lo podés ver en el dev tool de chrome.
+var activeTab = localStorage.getItem('activeTab');
+
+// En la consola te va a mostrar la pestaña donde hiciste el último click y lo
+// guarda en "activeTab". Te dejo el console para que lo veas. Y cuando refresques
+// el browser, va a quedar activa la última donde hiciste el click.
+console.log(activeTab);
+
+if (activeTab) {
+   $('button[href="' + activeTab + '"]').tab('show');
+}
+
+    $(document).ready(function() {
+            $('#dataTables-example').DataTable({
+                responsive: true
+            });
+            $('#doctorFee').DataTable({
+                responsive: true
+            });
+            $('#testFee').DataTable({
+                responsive: true
+            });
+            $('#salary-dataTable').DataTable({
+                responsive: true
+            });
+
+
+
+        });
+
+
+
+    </script>
+{% endblock %}

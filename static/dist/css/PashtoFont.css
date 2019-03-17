@@ -1,0 +1,14 @@
+@font-face{
+    font-family: 'MyPashtoFont';
+    src:url('Fonts/NassimArabic-Regular.eot');
+    src:url('Fonts/NassimArabic-Regular.eot?#iefix')format('embedded-opentype'),
+    url('Fonts/NassimArabic-Regular.woff')format('woff'),
+    url('Fonts/NassimArabic-Regular.ttf')format('truetype'),
+    url('Fonts/nassimarabic-regular-webfont.svg#svgFontName')format('svg');
+}
+@font-face{font-family:'MyPashtoFontBold';
+    src:url('Fonts/NassimArabic-Bold.eot');
+    src:url('Fonts/NassimArabic-Bold.eot?#iefix')format('embedded-opentype'),
+    url('Fonts/NassimArabic-Bold.woff')format('woff'),
+    url('Fonts/NassimArabic-Bold.ttf')format('truetype'),
+    url('Fonts/nassimarabic-bold-webfont.svg#svgFontName')format('svg');}

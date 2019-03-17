@@ -1,0 +1,121 @@
+
+{% extends "recieption/master.html" %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static',filename='vendor/datatables-plugins/dataTables.bootstrap.css') }}">
+
+  <!-- DataTables Responsive CSS -->
+  <!-- <link href="static/vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet"> -->
+<link rel="stylesheet" href="{{ url_for('static' ,filename='vendor/datatables-responsive/dataTables.responsive.css') }}">
+
+{% endblock %}
+
+{% block body %}
+
+
+<div class="row" style="margin-top:20px">
+    <div class="col-sm-4">
+        <div class="panel panel-default">
+            <div class="panel-heading ">
+                <h4>Payment</h4>
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <form action="{{url_for('storePayment')}}">
+                <div class="form-group">
+                    <label>Amount</label>
+                    <input type = "number" class="form-control" name = "amount">
+                    
+                </div>
+
+                <div class="form-group">
+                    <label>Patient Name</label>
+                    <select name="patientName" id="patientName" class = "form-control">
+                        
+                    </select>                    
+                </div>
+
+                <div class="form-group">
+                        <label>Docter Name</label>
+                        <select name="docterName" id="docterName" class = "form-control">
+                          
+    
+                        </select>                    
+                    </div>
+                
+                <div class="form-group">
+                        <label>Test</label>
+                        <select name="test" id="" class = "form-control">
+                            <option value=""></option>
+                            <option value=""></option>
+    
+                        </select>                    
+                    </div>
+               
+                
+                
+                <button type="submit" class = "btn bg-green" id = "docter-Registration" >Register</button>
+            </form>
+            </div>
+            <!-- /.panel-body -->
+        </div>
+    </div>
+    
+    
+</div>
+
+{% endblock %}
+
+{% block head_js %}
+<!-- <script src="../vendor/datatables/js/jquery.dataTables.min.js"></script> -->
+<script src="{{ url_for('static',filename='vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
+
+<!-- <script src="../vendor/datatables-plugins/dataTables.bootstrap.min.js"></script> -->
+<script src="{{ url_for('static',filename='vendor/datatables-plugins/dataTables.bootstrap.min.js') }}"></script>
+
+<!-- <script src="../vendor/datatables-responsive/dataTables.responsive.js"></script> -->
+<script src="{{ url_for('static',filename='vendor/datatables-responsive/dataTables.responsive.js') }}"></script>
+
+<script>
+
+    $(document).ready(function() {
+
+            $('#dataTables-example').DataTable({
+                responsive: true
+            });
+        
+        });
+
+
+        $('#patientName').one("click",function(){
+           
+                 $.getJSON('/getPatientNames' ,
+ 
+                  function(data) {
+                     console.log(data);
+                    for(var i = 0; i < data.length; i++){
+                     $('#patientName').append('<option>'+ data[i]['patientName'] +'</option>');
+                    }
+ 
+            
+                 });
+         
+       });
+
+       $('#docterName').one("click",function(){
+           
+           $.getJSON('/getDocterNames' ,
+
+            function(data) {
+               console.log(data);
+              for(var i = 0; i < data.length; i++){
+               $('#docterName').append('<option>'+ data[i]['employeeName'] +'</option>');
+              }
+
+      
+           });
+   
+ });
+    
+    </script>
+{% endblock %}

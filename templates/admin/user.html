@@ -1,0 +1,182 @@
+
+  {% extends "admin/master.html" %}
+  {% import "bootstrap/wtf.html" as wtf %}
+
+    <link rel="stylesheet" href="{{ url_for('static' ,filename='css/select2.min.css') }}">
+    <style>
+    .checkbox:first-child {
+        direction: ltr
+    }
+    </style>
+  {% block content %}
+<div class="row">
+  <div class="col-lg-12">
+    <h1 class="page-header">کارونکی</h1>
+  </div>
+  <!-- /.col-lg-12 -->
+</div>
+
+<div class="container-fluid">
+  <div class="col-lg-12 col-sm-12">
+    <div
+      class="btn-pref btn-group btn-group-justified btn-group-lg"
+      role="group"
+      aria-label="..."
+    >
+      <div class="btn-group" role="group">
+        <button
+          type="button"
+          id="favorites"
+          class="btn btn-default"
+          href="#tab2"
+          data-toggle="tab"
+        >
+          <span class="glyphicon glyphicon-heart" aria-hidden="true"></span>
+          <div class="hidden-xs">د کارونکی اظافه کول</div>
+        </button>
+      </div>
+
+      <div class="btn-group" role="group">
+        <button
+          type="button"
+          id="following"
+          class="btn btn-default"
+          href="#tab3"
+          data-toggle="tab"
+        >
+          <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+          <div class="hidden-xs">د کارونوکو لیست</div>
+        </button>
+      </div>
+    </div>
+
+    <div class="well">
+      <div class="tab-content">
+        <div class="tab-pane fade in" id="tab2">
+          <div class="panel panel-default">
+            <div class="panel-heading "></div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <form action="#" method="POST">
+
+                        {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                          <div class="alert alert-danger fade in">
+                          {% for message in messages %}
+
+                            <a href="#" class="close" data-dismiss="alert">&times;</a>
+                            <strong>Error!</strong> {{ message }}
+
+                          {% endfor %}
+                         </div>
+                        {% endif %}
+                        {% endwith %}
+                        {{form.hidden_tag()}}
+
+                        {{wtf.form_field(form.employee)}}
+                        {{wtf.form_field(form.username)}}
+                        {{wtf.form_field(form.password)}}
+                        {{wtf.form_field(form.confirm)}}
+                        {{wtf.form_field(form.role)}}
+                        {{wtf.form_field(form.active)}}
+
+
+                <button type="submit" class = "btn bg-green" id = "user-Registraion" >ثبتول</button>
+            </form>
+            </div>
+            <!-- /.panel-body -->
+          </div>
+        </div>
+        <div class="tab-pane fade in" id="tab3">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="panel panel-default">
+                  <div class="panel-heading">
+                  </div>
+                  <!-- /.panel-heading -->
+                  <div class="panel-body">
+                      <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
+                        <thead>
+
+                            <tr>
+
+                                <th>پوره نوم</th>
+                                <th>نوم</th>
+                                <th>فعالیت</th>
+                                <th>رول</th>
+                                <th>تغیرول</th>
+
+
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                                {% for user in users %}
+                            <tr>
+
+                                <td>{{user.employeeName.decode('utf-8')}}</td>
+                                <td>{{user.username}}</td>
+                                <td>{{user.active}}</td>
+                                <td>{{user.name}}</td>
+                                <td>
+                                  <a href="{{url_for('resetpass',uId=user.id)}}"><button class= "btn btn-success float-left">پاسورډ تغیرول</button></a>
+                                  <a href="{{url_for('updateUser',uId=user.id)}}"><button class= "btn btn-success float-left">رول تغیرول</button></a>
+                                   <a href="{{url_for('removeUser', uId=user.id) }}"> <button class= "btn btn-danger">له منځه وړل</button></a>
+
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                      </table>
+                      <!-- /.table-responsive -->
+
+                  </div>
+                  <!-- /.panel-body -->
+              </div>
+              <!-- /.panel -->
+            </div>
+            <!-- /.col-lg-12 -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block head_js %}
+<!-- <script src="../vendor/datatables/js/jquery.dataTables.min.js"></script> -->
+<script src="{{ url_for('static',filename='vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
+
+<!-- <script src="../vendor/datatables-plugins/dataTables.bootstrap.min.js"></script> -->
+<script src="{{ url_for('static',filename='vendor/datatables-plugins/dataTables.bootstrap.min.js') }}"></script>
+
+<!-- <script src="../vendor/datatables-responsive/dataTables.responsive.js"></script> -->
+<script src="{{ url_for('static',filename='vendor/datatables-responsive/dataTables.responsive.js') }}"></script>
+
+<script>
+       $('select[name=employee]').css('width', '100%');
+
+   $('select[name=employee]').select2();
+ $('button[data-toggle="tab"]').on('show.bs.tab', function(e) {
+    localStorage.setItem('activeTab', $(e.target).attr('href'));
+});
+
+  // Acá guarda el index al cual corresponde la tab. Lo podés ver en el dev tool de chrome.
+  var activeTab = localStorage.getItem("activeTab");
+
+  // En la consola te va a mostrar la pestaña donde hiciste el último click y lo
+  // guarda en "activeTab". Te dejo el console para que lo veas. Y cuando refresques
+  // el browser, va a quedar activa la última donde hiciste el click.
+  console.log(activeTab);
+
+  if (activeTab) {
+    $('button[href="' + activeTab + '"]').tab("show");
+  }
+
+  $(document).ready(function() {
+    $("#dataTables-example").DataTable({
+      responsive: true
+    });
+  });
+</script>
+
+{% endblock %}

@@ -1,0 +1,183 @@
+
+{% extends "recieption/master.html" %}
+
+
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block head %}
+<link rel="stylesheet" href="{{
+    url_for('static',filename='vendor/datatables-plugins/dataTables.bootstrap.css')
+    }}">
+
+<!-- DataTables Responsive CSS -->
+<!-- <link href="static/vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet"> -->
+<link rel="stylesheet" href="{{ url_for('static'
+    ,filename='vendor/datatables-responsive/dataTables.responsive.css') }}">
+<style>
+#a{
+    border: 0;
+    border-bottom: 1px solid black;
+    border-radius: 0 ;
+    margin-right: 30px;
+    text-align: center;
+    /* margin-right: 10px; */
+}
+label{
+    padding: 10px
+}
+#last{
+    border-bottom: 0.5px solid black;
+}
+.ID{
+    display: none;
+}
+</style>
+{% endblock %}
+
+{% block body %}
+
+<div class="row" style="margin-top:20px">
+   
+              <div class = "ID">{{paymentID}}</div>
+         
+    <div class="col-sm-offset-3 col-sm-6">
+        <hr>
+        <hr>
+
+        <table>
+            <tr>
+
+                <td><label for="">Docter Name </label></td>
+                <td><input type="text" id="a"  class=" docterName" readonly ="readonly"></td>
+                <td><label for="">Visit Date</label></td>
+                <td><input type="text" id="a" class="form-group visitDate"></td>
+            </tr>
+            <tr>
+                <td><label for="">Patient Name</label></td>
+                <td><input type="text" id="a" class="form-group patientName"></td>
+                <td><label for="">Patient ID</label></td>
+                <td><input type="text" id="a" class="form-group patientID"></td>
+            </tr>
+            <tr>
+                <td><label for="">Age</label></td>
+                <td><input type="text" id="a" class="form-group age"></td>
+                <td><label for="">Gender</label></td>
+                <td><input type="text" id="a" class="form-group gender"></td>
+            </tr>
+            <tr >
+                <td><label for="">Test ID</label></td>
+                <td><input type="text" id="a" class="form-group testID"></td>
+                <td><label for="">Test Name</label></td>
+                <td><input type="text" id="a" class="form-group testName"></td>
+            </tr>
+            <tr id="last">
+                <td><label for="">Test Price</label></td>
+                <td><input type="text" id="a" class="form-group testPrice"></td>
+                <td><label for="">Cashir</label></td>
+                <td><input type="text" id="a" class="form-group"></td>
+            </tr>
+            <tr>
+                <td><label for="">Discount</label></td>
+                <td><input type="text" id="a" class="form-group discount"></td>
+
+            </tr>
+            <tr>
+                <td><label for="">Net Amount</label></td>
+                <td><input type="text" id="a" class="form-group netAmount"></td>
+
+            </tr>
+            <tr>
+                   <td><button class = "btn btn-default">Print</button></td>
+                </tr>
+
+
+
+
+
+
+        </table>
+
+
+    </div>
+
+
+</div>
+
+{% endblock %}
+
+{% block head_js %}
+<!-- <script src="../vendor/datatables/js/jquery.dataTables.min.js"></script> -->
+<script src="{{
+    url_for('static',filename='vendor/datatables/js/jquery.dataTables.min.js')
+    }}"></script>
+
+<!-- <script src="../vendor/datatables-plugins/dataTables.bootstrap.min.js"></script> -->
+<script src="{{
+    url_for('static',filename='vendor/datatables-plugins/dataTables.bootstrap.min.js')
+    }}"></script>
+
+<!-- <script src="../vendor/datatables-responsive/dataTables.responsive.js"></script> -->
+<script src="{{
+    url_for('static',filename='vendor/datatables-responsive/dataTables.responsive.js')
+    }}"></script>
+
+<script>
+
+   var data = $('.ID').text()
+    data = JSON.stringify(data);
+
+    $.ajax({
+        url:'/getLabReport',
+        type: 'POST',
+        data: data,
+        contentType: 'application/json; charset = UTF-8',
+        cache:false,
+        success: function(response){
+            console.log(response);
+
+            
+
+             $('.docterName').val(response[0]['employeeName']);
+            $('.patientName').val(response[0]['patientName']);
+            $('.patientID').val(response[0]['patientId']);
+             $('.visitDate').val(response[0]['visitDate']);
+             $('.age').val(response[0]['patientAge']);
+             $('.gender').val(response[0]['gender']);
+            $('.testPrice').val(response[0]['Amount']);
+            $('.testName').val(response[0]['Name']);
+            $('.testID').val(response[0]['testId']);
+
+
+            
+            $('.discount').val(0.0);
+            $('.netAmount').val(response[0]['Amount']);
+
+        },
+        error:function(response){
+            console.log("Error")
+        }
+
+    });
+
+
+        $('.discount').on("change keyup blur",function(){
+
+                console.log($('.discount').val());
+                var main = $('.testPrice').val();
+                var disc = $('.discount').val();
+                var dec = (disc/100).toFixed(2);
+                var mult = main*dec;
+                var discount = main-mult;
+                $('.netAmount').val(discount);
+
+        });
+    
+
+
+
+
+
+    
+    </script>
+{% endblock %}

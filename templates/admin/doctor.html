@@ -1,0 +1,259 @@
+
+  {% extends "admin/master.html" %}
+  {% import "bootstrap/wtf.html" as wtf %}
+
+
+  {% block head %}
+  <link rel="stylesheet" href="{{ url_for('static',filename='vendor/datatables-plugins/dataTables.bootstrap.css') }}">
+
+    <!-- DataTables Responsive CSS -->
+    <!-- <link href="static/vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet"> -->
+  <link rel="stylesheet" href="{{ url_for('static' ,filename='vendor/datatables-responsive/dataTables.responsive.css') }}">
+
+{% endblock %}
+
+  {% block content %}
+
+<div class="row">
+  <div class="col-lg-12">
+      <h1 class="page-header">ډاکټر</h1>
+  </div>
+  <!-- /.col-lg-12 -->
+</div>
+
+<div class = "container-fluid">
+<div class="col-lg-12 col-sm-12">
+
+  <div class="btn-pref btn-group btn-group-justified btn-group-lg" role="group" aria-label="...">
+
+      <div class="btn-group" role="group">
+          <button type="button" id="favorites" class="btn btn-default" href="#tab2" data-toggle="tab"><span class="fa fa-plus-square" aria-hidden="true"></span>
+              <div class="hidden-xs"> ډاکټر اضافه کړی </div>
+          </button>
+      </div>
+
+      <div class="btn-group" role="group">
+          <button type="button" id="following" class="btn btn-default" href="#tab3" data-toggle="tab"><span class="fa fa-list" aria-hidden="true"></span>
+              <div class="hidden-xs"> د ډاکټرانو لیست </div>
+          </button>
+      </div>
+  </div>
+
+      <div class="well">
+    <div class="tab-content">
+
+
+      <div class="tab-pane fade in"  id="tab2">
+
+
+        <div class="panel panel-default">
+            <div class="panel-heading ">
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <form action="{% if not rout == '0' %}{{ url_for('storeDoctor', modification = 'y', doctorId= rout) }}{% else %} {{ url_for('storeDoctor', modification = 'n', doctorId= 'None') }} {% endif %}" method='POST'>
+                        {{wtf.form_field(form.empNames)}}
+                        {{wtf.form_field(form.profession)}}
+                        {{wtf.form_field(form.room)}}
+                        {{wtf.form_field(form.fee)}}
+
+
+                <button type="submit" class = "btn bg-green" >ثبتول</button>
+            </form>
+            </div>
+            <!-- /.panel-body -->
+        </div>
+
+
+    </div>
+      <div class="tab-pane fade in" id="tab3">
+        <div class="row">
+          <div class="col-lg-12">
+              <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <div class="input-group ">
+                    <form action="{{ url_for('doctorByProfession', report='n') }}">
+                        <input type="text" class="form-control" placeholder="Search...", name="profession">
+                        <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </span>
+                    </form>
+                </div>
+                  </div>
+                  <!-- /.panel-heading -->
+                  <div class="panel-body">
+                      <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
+                          <thead>
+                              <tr>
+                                  <th hidden = true >ID</th>
+                                  <th>نوم</th>
+                                  <th>مسلک</th>
+                                  <th>وطاق</th>
+                                  <th>فیس</th>
+                                  <th>شمیره</th>
+                                  <th>ایمیل</th>
+                                  <th>Action</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                          {% for d in data %}
+                            <tr>
+                                <td hidden=true>{{ d.doctorId }}</td>
+                                <td>{{ d.employeeName.decode('utf-8') }}</td>
+                                <td>{{ d.profession.decode('utf-8') }}</td>
+                                <td>{{ d.roomNumber }}</td>
+                                <td>{{ d.fee }}</td>
+                                <td>{{ d.phoneNumber }}</td>
+                                <td>{{ d.employeeEmail }}</td>
+                                <td>
+                                    <a class="edit" href="{{ url_for('doctor', doctorId=d.doctorId) }}"><button class= "update btn btn-warning btn-sm"><i class ="fa fa-edit"></i> </button></a>
+                                    <a  href="{{ url_for('deleteDoctor', doctorId=d.doctorId) }}"><button class= "update btn btn-danger btn-sm"><i class ="fa fa-trash fa-large"></i> </button></a>
+
+                                </td>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                      </table>
+                      <!-- /.table-responsive -->
+
+                  </div>
+                  <!-- /.panel-body -->
+              </div>
+              <!-- /.panel -->
+          </div>
+          <!-- /.col-lg-12 -->
+      </div>
+      </div>
+    </div>
+  </div>
+
+  </div>
+</div>
+
+
+{% endblock %}
+
+{% block head_js %}
+<!-- <script src="../vendor/datatables/js/jquery.dataTables.min.js"></script> -->
+<script src="{{ url_for('static',filename='vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
+
+<!-- <script src="../vendor/datatables-plugins/dataTables.bootstrap.min.js"></script> -->
+<script src="{{ url_for('static',filename='vendor/datatables-plugins/dataTables.bootstrap.min.js') }}"></script>
+
+<!-- <script src="../vendor/datatables-responsive/dataTables.responsive.js"></script> -->
+<script src="{{ url_for('static',filename='vendor/datatables-responsive/dataTables.responsive.js') }}"></script>
+
+<script>
+var type = '';
+
+
+$('select').css('width', '100%');
+
+
+$('select[name = profession]').select2();
+$('select[name = emnotpNames]').select2();
+
+        
+$('select[name = profession]').select2().on('select2:open', function(e) {
+  // set a global reference for the current selected Select
+  if(e.target.name == 'profession'){
+        type = 'profession';
+  }
+
+
+    
+  if (typeof tempSelectedObj === 'undefined') {
+    tempSelectedObj = null;
+  }
+  tempSelectedObj = this;
+});
+
+$(document).on('keyup', 'input.select2-search__field', function(e) {
+    if (e.keyCode === 13) {
+
+    var newValue = $(this).val();
+    data = {
+        newValue: newValue,
+        type:type
+    }
+    
+    data = JSON.stringify(data);
+    $.ajax({
+        url:'/dynamicStore',
+        type: 'POST',
+        data:data,
+        contentType: 'application/json; charset = UTF-8',
+        cache:false,
+        success: function(response){
+            
+            console.log(response);
+             
+            text = response.name;
+            value = response.id;
+            var newOpt = $('<option>')
+      .val(value)
+      .text(text)
+
+    // append to the current Select
+    
+    $(tempSelectedObj)
+      .append(newOpt);
+      a = value.toString()
+      $('select[name = profession]').val(a).trigger('change').select2().trigger('select2:close');
+    
+
+    
+
+  
+    
+    
+
+        },
+        error:function(response){
+            console.log("Error")
+        }
+
+        });
+    }
+});
+
+
+$('.edit').click(function(){
+
+    alert(1221)
+
+    $('button[href="tab3"]').tab('show');
+
+
+
+});
+
+
+$('button[data-toggle="tab"]').on('show.bs.tab', function(e) {
+    localStorage.setItem('activeTab', $(e.target).attr('href'));
+});
+
+// Acá guarda el index al cual corresponde la tab. Lo podés ver en el dev tool de chrome.
+var activeTab = localStorage.getItem('activeTab');
+
+// En la consola te va a mostrar la pestaña donde hiciste el último click y lo
+// guarda en "activeTab". Te dejo el console para que lo veas. Y cuando refresques
+// el browser, va a quedar activa la última donde hiciste el click.
+console.log(activeTab);
+
+if (activeTab) {
+   $('button[href="' + activeTab + '"]').tab('show');
+}
+
+    $(document).ready(function() {
+
+            $('#dataTables-example').DataTable({
+                responsive: true
+            });
+
+        });
+
+    </script>
+{% endblock %}
