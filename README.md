@@ -1,2 +1,2 @@
-# Afghan Clinic System
+# AfghanClinic
 
